@@ -1,18 +1,7 @@
 <?php
+include_once "incl/bootstrap.php";
 
-// autoload magic loads the necessarry class
-spl_autoload_register(function ($class_name) {
-	$cl = strtolower($class_name);
-	$rule = "rules/{$cl}.php";
-	$incl = "incl/{$cl}.php";
-	if (file_exists($rule)) {
-		include $rule;
-	} else {
-		include $incl;
-	}
-});
-
-$feed = new BlogFeed('Polizei');
+$parser = $argv[1];
+$feed = new BlogFeed($parser);
 $feed->parse();
-$feed = new BlogFeed('Berlin');
-$feed->parse();
+print_r($feed->posts);

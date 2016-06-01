@@ -51,17 +51,25 @@ class Polizei extends RDF
 		return "";
 	}
 
-	function fill_missing_data($xpath, &$post)
+	function get_missing_title($xpath, &$post)
 	{
 		$post->title = $xpath->query('//h1')->item(0)->nodeValue;
+	}
+
+	function get_missing_date($xpath, &$post)
+	{
 		$date = explode(',', $xpath->query('//p[@class="inhaltTextDatum"]')
 				->item(0)->nodeValue);
 		$post->date = $date[0];
+	}
+
+
+	function get_missing_category($xpath, &$post)
+	{
 		$segs = explode('/', $post->link);
 		$keys = array_keys($this->category);
 		foreach ($segs as $seg){
 			if (in_array($seg, $keys)) {
-				print ("found: $seg, {$this->category[$seg]}\n");
 				$post->category = $this->category[$seg];
 				break;
 			}

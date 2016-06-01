@@ -38,8 +38,21 @@ class BlogFeed
 		$xpath = new DOMXpath($doc);
 		$post->picture = (string) $this->feed->get_image($xpath);
 		$post->text  = (string) $this->feed->get_content($xpath);
-		if ($post->title == null || $post->date == null) {
-			$this->feed->fill_missing_data($xpath, $post);
+		$this->fill_missing_data($xpath, $post);
+	}
+
+	function fill_missing_data($xpath, &$post)
+	{
+		if ($post->title == null) {
+			$this->feed->get_missing_title($xpath, $post);
+		}
+
+		if ($post->date == null) {
+			$this->feed->get_missing_date($xpath, $post);
+		}
+
+		if ($post->category == null) {
+			$this->feed->get_missing_category($xpath, $post);
 		}
 	}
 }
