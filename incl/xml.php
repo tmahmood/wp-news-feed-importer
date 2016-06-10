@@ -19,5 +19,13 @@ class XML
 		$post->category = $this->category;
 		return $post;
 	}
+
+
+	function get_page_obj($post)
+	{
+		$doc = new DOMDocument();
+		@$doc->loadHTMLFile($post->link);
+		return new DOMXpath($doc);
+	}
 }
 

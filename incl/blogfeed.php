@@ -3,7 +3,6 @@
 class BlogFeed
 {
     var $posts = array();
-	var $feed_url = null;
 
     function __construct($feed)
     {
@@ -32,14 +31,19 @@ class BlogFeed
 	 */
 	function parse_source_link(&$post)
 	{
-		$doc = new DOMDocument();
-		@$doc->loadHTMLFile($post->link);
-		$xpath = new DOMXpath($doc);
+		if (isset($this->feed->json_data)) {
+			return;
+		}
+		$xpath = $this->feed->get_page_obj($post);
 		$post->picture = (string) $this->feed->get_image($xpath);
 		$post->text  = (string) $this->feed->get_content($xpath);
 		$this->fill_missing_data($xpath, $post);
 	}
 
+	/**
+	 * Fill up missing information, obj could be either JSON object
+	 * or XML object
+	 */
 	function fill_missing_data($xpath, &$post)
 	{
 		if ($post->title == null) {
@@ -50,6 +54,9 @@ class BlogFeed
 		}
 		if ($post->category == null) {
 			$this->feed->get_missing_category($xpath, $post);
+		}
+		if ($post->text == null) {
+			$this->feed->get_missing_text($xpath, $post);
 		}
 	}
 }

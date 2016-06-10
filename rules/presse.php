@@ -21,5 +21,3 @@ class Presse extends XML
 		return "";
 	}
 }
-
-

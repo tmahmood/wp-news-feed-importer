@@ -14,12 +14,21 @@ class Berlin extends XML
 			$txt[] = $element->nodeValue;
 		}
 		$h = array_shift($txt);
-		assert(strpost($h, 'Nr.') != 0, "check description parsing, Nr. missing");
+		if (count($txt) == 0) {
+			$paras = explode("\n", $h, 3);
+			return array_pop($paras);
+		}
 		return implode("", $txt);
 	}
 
 	function get_image($xpath)
 	{
 		return "";
+	}
+
+	function get_missing_text($xpath, &$post)
+	{
+		print_r ($post);
+
 	}
 }

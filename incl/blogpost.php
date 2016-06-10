@@ -8,5 +8,6 @@ class BlogPost
 	var $category;
     var $text;
 	var $picture;
+
 }
 

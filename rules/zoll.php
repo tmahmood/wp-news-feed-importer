@@ -18,17 +18,28 @@ class Zoll extends XML
 
 	function get_image($xpath)
 	{
-		$img = $xpath->query('id("main")//img')->item(0)->getAttribute('src');
-		return $img;
+		$img = $xpath->query('id("main")//img')->item(0);
+		if ($img == null) {
+			return '';
+		}
+		return $img->getAttribute('src');
 	}
 
 	function get_missing_date($xpath, &$post)
 	{
-		$date = explode(',', $xpath->query('id("main")/div[@class="meta-data"]')->item(0)->nodeValue);
-		$post->date = $date[1];
+		$val = $xpath->query('id("main")/div[@class="meta-data"]')
+								->item(0)
+								->nodeValue;
+		$date = explode(',', $val);
+		if (count($date) < 1) {
+			$post->date = $date[1];
+		}
 	}
 
-
+	function get_missing_text($xpath, &$post)
+	{
+		return '';
+	}
 }
 
 
