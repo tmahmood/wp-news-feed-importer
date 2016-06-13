@@ -4,7 +4,7 @@ class Brandenburg extends JSON
 {
 	var $feed_url = "https://polizei.brandenburg.de/ipa_api/news/version/1/count/300";
 	var $base_url = "https://polizei.brandenburg.de";
-	var $category = [
+	var $category = array(
 						"1"   => "Prignitz",
 						"2"   => "Ostprignitz-Ruppin",
 						"3"   => "Oberhavel",
@@ -25,7 +25,7 @@ class Brandenburg extends JSON
 						"102" => "Brandenburg an der Havel (PM/BRB)",
 						"103" => "Cottbus (CBS)",
 						"500" => "Überregional",
-					];
+					);
 
 	function parse(&$post, $item)
 	{

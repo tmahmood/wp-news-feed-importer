@@ -5,7 +5,7 @@ class RDF
 	function get_items()
 	{
 		if (is_array($this->feed_url)) {
-			$feeds = [];
+			$feeds = array();
 			foreach ($this->feed_url as $url){
 				$feeds = array_merge($feeds, $this->get_items_from_feed($url));
 			}
