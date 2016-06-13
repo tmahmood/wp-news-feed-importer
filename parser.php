@@ -15,34 +15,41 @@ if (count($argv) > 1) {
 	$cls = $argv[1];
 	$feed = new BlogFeed($cls);
 	$feed->parse();
-	file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json", json_encode($feed->posts));
+	file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json",
+					  json_encode($feed->posts));
 } else {
-	$ar = array('Berlin', 'Polizei', 'Presse', 'Saarland', 'Zoll', 'Sachsen', 'Brandenburg');
+	$ar = array('Berlin', 'Polizei', 'Presse', 'Saarland',
+				'Zoll', 'Sachsen', 'Brandenburg');
 	foreach ($ar as $cls){
 		print ("parsing: $cls\n");
 		$feed = new BlogFeed($cls);
-		$feed->parse();
-		file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json", json_encode($feed->posts));
+		$feed->parse_feed();
+		file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json",
+						  json_encode($feed->posts));
+		$posts = array_merge($posts, $feed->posts);
 	}
 }
 
+// unregister our autoload fuction so that
+// it does not conflict with Wordpresses  autoloader
 $functions = spl_autoload_functions();
 foreach($functions as $function) {
 	spl_autoload_unregister($function);
 }
 
+print_r ($posts);
+
 // Load WordPress
-// TODO: CHANGE Path to your WordPress
 require_once WORDPRESS_PATH .'/wp-load.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
 
 $user_id = 1;
-foreach ($feed->posts as $post){
-	$content = "$post->content<br><br>Zum Originalartikel: $post->link";
+foreach ($posts as $post){
+	$content = "$post->text<br><br>Zum Originalartikel: $post->link";
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
 				'post_content'  => $content,
-				'post_date'     => $post->date,
+				'post_date'     => date('Y-m-d H:i:s'),
 				'post_author'   => $user_id,
 				'post_type'     => 'post',
 				'post_status'   => 'publish',

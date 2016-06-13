@@ -12,7 +12,7 @@ class BlogFeed
 	/**
 	 * Do parsing
 	 */
-	function parse()
+	function parse_feed()
 	{
 		$items = $this->feed->get_items();
 		if (count($items) == 0) {
