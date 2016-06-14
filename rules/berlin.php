@@ -23,7 +23,16 @@ class Berlin extends XML
 
 	function get_image($xpath)
 	{
-		return "";
+		$imgxpath = '//div[@class="html5-section article"]//img';
+		$images = $xpath->query($imgxpath);
+		if (count($images) == 0) {
+			return "";
+		}
+		$imgs = array();
+		foreach ($images as $img){
+			$imgs[] = $img->getAttribute('href');
+		}
+		return $imgs;
 	}
 
 	function get_missing_text($xpath, &$post)

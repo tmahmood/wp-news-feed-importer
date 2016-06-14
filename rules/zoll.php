@@ -18,7 +18,11 @@ class Zoll extends XML
 
 	function get_image($xpath)
 	{
-		$img = $xpath->query('id("main")//img')->item(0);
+		$images = $xpath->query('id("main")//img');
+		$imgs = array();
+		if (count($images) == 0) {
+			return "";
+		}
 		if ($img == null) {
 			return '';
 		}
