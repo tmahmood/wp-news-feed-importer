@@ -32,11 +32,14 @@ class Brandenburg extends JSON
 		$post->category = $this->category[$item->district];
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
-		$post->text = $item->text;
+		$post->text = Utils::clean_text($item->text);
 		if ($item->thumbnail != false) {
-			$post->picture = $item->images[0];
+			$pics = array();
+			foreach ($item->images as $img){
+				$pics[] = $this->base_url . $img;
+			}
+			$post->picture = implode("\n", $pics);
 		}
-		$post->date = date("Y-m-d H:i:s", $item->timestamp);
 	}
 
 	function get_items()
@@ -45,4 +48,5 @@ class Brandenburg extends JSON
 		$items = json_decode($str);
 		return $items->data;
 	}
+
 }

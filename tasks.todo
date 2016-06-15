@@ -1,0 +1,40 @@
+# vim:ft=todo
+
+DONE 2016-06-15 Image parsing @Berlin
+    CLOSED: 2016-06-15 15:04:24
+    :LOGBOOK:
+        DONE: 2016-06-15 15:04:24
+DONE 2016-06-15 Fix new lines in texts @Berlin
+    CLOSED: 2016-06-15 15:04:27
+    :LOGBOOK:
+        DONE: 2016-06-15 15:04:27
+DONE 2016-06-15 Image parsing @Polizei
+    CLOSED: 2016-06-15 15:04:30
+    :LOGBOOK:
+        DONE: 2016-06-15 15:04:30
+DONE 2016-06-15 Image parsing @Prese
+    CLOSED: 2016-06-15 15:08:50
+    :LOGBOOK:
+        DONE: 2016-06-15 15:08:50
+DONE 2016-06-15 Correct line-breaking @Prese
+    CLOSED: 2016-06-15 15:08:47
+    :LOGBOOK:
+        DONE: 2016-06-15 15:08:47
+        DONE: 2016-06-15 15:04:36
+DONE 2016-06-15 Image parsing @Saarland
+    CLOSED: 2016-06-15 15:08:53
+    :LOGBOOK:
+        DONE: 2016-06-15 15:08:53
+DONE 2016-06-15 Image parsing @Zoll
+    CLOSED: 2016-06-15 15:07:49
+    :LOGBOOK:
+        DONE: 2016-06-15 15:07:49
+DONE 2016-06-15 Image parsing @Sachsen
+    CLOSED: 2016-06-15 15:08:22
+    :LOGBOOK:
+        DONE: 2016-06-15 15:08:22
+DONE 2016-06-15 Image parsing @Brandenburg
+    CLOSED: 2016-06-15 15:15:42
+    :LOGBOOK:
+        DONE: 2016-06-15 15:15:42
+

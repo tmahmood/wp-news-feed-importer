@@ -1,6 +1,6 @@
 <?php
 
-class RDF
+class RDF extends Basefeed
 {
 	function get_items()
 	{

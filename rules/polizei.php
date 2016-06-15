@@ -2,6 +2,7 @@
 
 class Polizei extends RDF
 {
+	var $base_url = 'http://www.polizei.bayern.de';
 	var $feed_url = array(
 			"http://www.polizei.bayern.de/lka/polizei.rss",
 			"http://www.polizei.bayern.de/verwaltungsamt/polizei.rss",
@@ -31,6 +32,7 @@ class Polizei extends RDF
 			"unterfranken" => "Würzburg (Polizeipräsidiums Unterfranken)",
 			);
 	var $text_cnt = '';
+	var $imgs_sel = '//table[@class="inhaltBilderTabelle"]//img';
 
 	function get_content($xpath)
 	{
@@ -43,26 +45,14 @@ class Polizei extends RDF
 				$text[] = $t;
 			}
 		}
-		return implode("\n\n", $text);
-	}
-
-	function get_image($xpath)
-	{
-		return "";
+		$txt = implode("", $text);
+		return Utils::clean_text($txt);
 	}
 
 	function get_missing_title($xpath, &$post)
 	{
 		$post->title = $xpath->query('//h1')->item(0)->nodeValue;
 	}
-
-	function get_missing_date($xpath, &$post)
-	{
-		$date = explode(',', $xpath->query('//p[@class="inhaltTextDatum"]')
-				->item(0)->nodeValue);
-		$post->date = $date[0];
-	}
-
 
 	function get_missing_category($xpath, &$post)
 	{

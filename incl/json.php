@@ -1,6 +1,6 @@
 <?php
 
-class JSON
+class JSON extends Basefeed
 {
 	var $json_data = true;
 }

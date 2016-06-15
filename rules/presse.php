@@ -5,6 +5,7 @@ class Presse extends XML
 	var $category = "Polizeimeldungen des Landes Sachsen-Anhalt";
 	var $feed_url = "http://www.presse.sachsen-anhalt.de/rss2.php?gruppe=1";
 	var $text_cnt = '//p';
+	var $imgs_sel = '//img';
 
 	function get_content($xpath)
 	{
@@ -13,11 +14,7 @@ class Presse extends XML
 		foreach ($elements as $ky=>$element){
 			$txt[] = $element->nodeValue;
 		}
-		return implode("\n\n", $txt);
-	}
-
-	function get_image($xpath)
-	{
-		return "";
+		$txt = implode("", $txt);
+		return Utils::clean_text($txt);
 	}
 }

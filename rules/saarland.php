@@ -18,7 +18,17 @@ class Saarland extends XML
 
 	function get_image($xpath)
 	{
-		return "";
+		$imgxpath = $this->text_cnt . '//img';
+		$elms = $xpath->query($imgxpath);
+		if (count($elms) == 0) {
+			return "";
+		}
+		$imgs = array();
+		$imgs[] = $el;
+		foreach ($elms as $elm){
+			$imgs[] = $elm->getAttribute('src');
+		}
+		return implode("\n", $imgs);
 	}
 
 }

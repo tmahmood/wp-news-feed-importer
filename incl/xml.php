@@ -1,6 +1,6 @@
 <?php
 
-class XML
+class XML extends BaseFeed
 {
 	function get_items()
 	{
@@ -19,7 +19,6 @@ class XML
 		$post->category = $this->category;
 		return $post;
 	}
-
 
 	function get_page_obj($post)
 	{

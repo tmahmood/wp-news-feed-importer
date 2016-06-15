@@ -49,9 +49,6 @@ class BlogFeed
 		if ($post->title == null) {
 			$this->feed->get_missing_title($xpath, $post);
 		}
-		if ($post->date == null) {
-			$this->feed->get_missing_date($xpath, $post);
-		}
 		if ($post->category == null) {
 			$this->feed->get_missing_category($xpath, $post);
 		}
