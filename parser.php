@@ -24,8 +24,6 @@ if (count($argv) > 1) {
 		print ("parsing: $cls\n");
 		$feed = new BlogFeed($cls);
 		$feed->parse_feed();
-		file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json",
-						  json_encode($feed->posts));
 		$posts = array_merge($posts, $feed->posts);
 	}
 }
@@ -41,10 +39,11 @@ foreach($functions as $function) {
 // Load WordPress
 require_once WORDPRESS_PATH .'/wp-load.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
+require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
 
 $user_id = 1;
 foreach ($posts as $post){
-	$content = "$post->text<br>$post->picture<br><br>Zum Originalartikel: $post->link";
+	$content = "$post->text<br><br>$post->picture<br><br>Zum Originalartikel: $post->link";
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
 				'post_content'  => $content,

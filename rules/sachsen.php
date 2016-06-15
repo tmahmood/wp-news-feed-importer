@@ -7,6 +7,12 @@ class Sachsen extends XML
 	var $category = null;
 	var $txt_selector = "id('content')/div[3]";
 	var $imgs_sel = "//div[@id='content']//img";
+	var $bad_url = array(
+		'https://www.polizei.sachsen.deindex.php?ajax=1&cmd=image&id=36162&identifier=e984bfcc7322503ca9aa04aca77eaf26',
+		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
+		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
+		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich_hoch.gif',
+		);
 
 	function get_content($xpath)
 	{
@@ -30,16 +36,5 @@ class Sachsen extends XML
 		print_r ($post);
 	}
 
- 	function get_image($xpath)
- 	{
-		$imgs = parent::get_image($xpath);
-		$remove = array(
-						'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
-						'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
-						'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich_hoch.gif',
-				);
-
-		return trim(str_replace($remove, '', $imgs));
- 	}
 }
 
