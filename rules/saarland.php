@@ -13,7 +13,8 @@ class Saarland extends XML
 		foreach ($elments as $ky=>$element){
 			$txt[] = $element->nodeValue;
 		}
-		return implode("", $txt);
+		$txt = implode("", $txt);
+		return Utils::clean_text($txt);
 	}
 
 	function get_image($xpath)
@@ -24,7 +25,6 @@ class Saarland extends XML
 			return "";
 		}
 		$imgs = array();
-		$imgs[] = $el;
 		foreach ($elms as $elm){
 			$imgs[] = $elm->getAttribute('src');
 		}
