@@ -19,12 +19,12 @@ class Basefeed
 			if (isset($this->bad_url) && in_array($imgurl, $this->bad_url)) {
 				continue;
 			}
-			$filename = sprintf("%s/imgs/%s_%s", SCRIPT_ABSPATH, md5($this->base_url),
-								md5($imgurl));
+			$fname = md5($this->base_url) . '_' . md5($imgurl);
+			$filename = sprintf("%s/imgs/%s", SCRIPT_ABSPATH, $fname);
 			if (!file_exists($imgurl)) {
 				Utils::download($imgurl, $filename);
 			}
-			$imgs[] = sprintf('<img src="%s">', $filename);
+			$imgs[] = sprintf('<img src="/feed_parser/imgs/%s">', $fname);
 		}
 		return implode("\n", $imgs);
 	}

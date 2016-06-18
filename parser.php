@@ -35,6 +35,12 @@ foreach($functions as $function) {
 	spl_autoload_unregister($function);
 }
 
+$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
+foreach ($posts as $post){
+	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+	print ("$content\n\n");
+}
+exit();
 
 // Load WordPress
 require_once WORDPRESS_PATH .'/wp-load.php';
@@ -42,8 +48,13 @@ require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
 
 $user_id = 1;
+$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
-	$content = "$post->text<br><br>$post->picture<br><br>Zum Originalartikel: $post->link";
+	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+	if (post_exists($post->title)) {
+		echo "POST EXISTS\n";
+		continue;
+	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
 				'post_content'  => $content,

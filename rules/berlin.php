@@ -15,13 +15,7 @@ class Berlin extends XML
 		foreach ($elments as $ky=>$element){
 			$txt[] = trim($element->nodeValue);
 		}
-		$h = array_shift($txt);
-		if (count($txt) == 0) {
-			$paras = explode("\n", $h, 3);
-			$txt = array_pop($paras);
-		} else {
-			$txt = implode('', $txt);
-		}
+		$txt = implode('', $txt);
 		return Utils::clean_text($txt);
 	}
 
