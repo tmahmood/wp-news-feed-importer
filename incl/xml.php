@@ -23,7 +23,8 @@ class XML extends BaseFeed
 	function get_page_obj($post)
 	{
 		$doc = new DOMDocument();
-		@$doc->loadHTMLFile($post->link);
+		$content = Utils::download_content($post->link);
+		@$doc->loadHTML($content);
 		return new DOMXpath($doc);
 	}
 }

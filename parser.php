@@ -1,4 +1,5 @@
 <?php
+define('DEBUG', file_exists('.git'));
 define('SCRIPT_ABSPATH', __dir__);
 include_once "incl/bootstrap.php";
 
@@ -15,8 +16,7 @@ if (count($argv) > 1) {
 	$cls = $argv[1];
 	$feed = new BlogFeed($cls);
 	$feed->parse_feed();
-	file_put_contents(SCRIPT_ABSPATH . "/json/$cls.json",
-					  json_encode($feed->posts));
+	$posts = $feed->posts;
 } else {
 	$ar = array('Berlin', 'Polizei', 'Presse', 'Saarland',
 				'Zoll', 'Sachsen', 'Brandenburg');
@@ -35,12 +35,14 @@ foreach($functions as $function) {
 	spl_autoload_unregister($function);
 }
 
-$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
-foreach ($posts as $post){
-	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
-	print ("$content\n\n");
+if (DEBUG) {
+	$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
+	foreach ($posts as $post){
+		$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+		print ("$content\n\n");
+	}
+	exit();
 }
-exit();
 
 // Load WordPress
 require_once WORDPRESS_PATH .'/wp-load.php';
