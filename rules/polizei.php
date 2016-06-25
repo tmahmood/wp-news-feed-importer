@@ -32,7 +32,8 @@ class Polizei extends RDF
 			"unterfranken" => "Würzburg (Polizeipräsidiums Unterfranken)",
 			);
 	var $text_cnt = '';
-	var $imgs_sel = '//table[@class="inhaltBilderTabelle"]//img';
+	var $imgs_sel = '//div[@class="inhaltBilderZoom"]/a';
+	var $custom_image_src = true;
 
 	function get_content($xpath)
 	{
@@ -65,4 +66,12 @@ class Polizei extends RDF
 			}
 		}
 	}
+
+	function get_image_custom($elm)
+	{
+		$href = $elm->getAttribute('href');
+		preg_match("/'(.[^']*)'/", $href, $match);
+		return $match[1];
+	}
+
 }

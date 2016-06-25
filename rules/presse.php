@@ -6,8 +6,8 @@ class Presse extends XML
 	var $feed_url = "http://www.presse.sachsen-anhalt.de/rss2.php?gruppe=1";
 	var $text_cnt = '//p';
 	var $imgs_sel = '//img';
-	var $base_url = 'https://www.polizei.sachsen.de';
-	var $bad_url = array('https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif');
+	var $base_url = 'http://www.presse.sachsen-anhalt.de/';
+	var $bad_url  = array();
 
 	function get_content($xpath)
 	{

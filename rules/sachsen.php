@@ -8,10 +8,9 @@ class Sachsen extends XML
 	var $txt_selector = "id('content')/div[3]";
 	var $imgs_sel = "//div[@id='content']//img";
 	var $bad_url = array(
-		'https://www.polizei.sachsen.deindex.php?ajax=1&cmd=image&id=36162&identifier=e984bfcc7322503ca9aa04aca77eaf26',
-		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
-		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich.gif',
-		'https://www.polizei.sachsen.de/navigation_internet_blau/symbole/blau/vanstrich_hoch.gif',
+		'navigation_internet_blau/symbole/blau/vanstrich.gif',
+		'navigation_internet_blau/symbole/blau/vanstrich.gif',
+		'navigation_internet_blau/symbole/blau/vanstrich_hoch.gif',
 		);
 
 	function get_content($xpath)

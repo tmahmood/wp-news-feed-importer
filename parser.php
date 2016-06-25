@@ -21,7 +21,8 @@ if (count($argv) > 1) {
 	$ar = array('Berlin', 'Polizei', 'Presse', 'Saarland',
 				'Zoll', 'Sachsen', 'Brandenburg');
 	foreach ($ar as $cls){
-		print ("parsing: $cls\n");
+		$dt = new \DateTime;
+		printf("[%s] - parsing: %s\n", $dt->format('d/m/Y - h:m'), $cls);
 		$feed = new BlogFeed($cls);
 		$feed->parse_feed();
 		$posts = array_merge($posts, $feed->posts);
@@ -53,7 +54,7 @@ $user_id = 1;
 $tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
 	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
-	if (post_exists($post->title)) {
+	if (post_exists($post->title, $content) !== 0) {
 		echo "POST EXISTS\n";
 		continue;
 	}

@@ -10,7 +10,7 @@ class Utils
 	}
 
 
-	public static function download($url, $filename)
+	public static function download($url, $filename, $is_html=true)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -22,12 +22,14 @@ class Utils
 		$output = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
-		$replace = array('<br>', '<br/>', '<br />');
-		$output = str_replace($replace, "\n", $output);
+		if ($is_html) {
+			$replace = array('<br>', '<br/>', '<br />');
+			$output = str_replace($replace, "\n", $output);
+		}
 		file_put_contents($filename, $output);
 	}
 
-	public static function download_content($url)
+	public static function download_content($url, $is_html=true)
 	{
 		if (DEBUG) {
 			$filepath = self::get_cache_path($url);
@@ -45,8 +47,10 @@ class Utils
 		$output = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
-		$replace = array('<br>', '<br/>', '<br />');
-		$output = str_replace($replace, "\n", $output);
+		if ($is_html) {
+			$replace = array('<br>', '<br/>', '<br />');
+			$output = str_replace($replace, "\n", $output);
+		}
 		if (DEBUG) {
 			$filepath = self::get_cache_path($url);
 			file_put_contents($filepath, $output);
