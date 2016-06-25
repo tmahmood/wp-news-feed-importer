@@ -26,6 +26,7 @@ class Brandenburg extends JSON
 						"103" => "Cottbus (CBS)",
 						"500" => "Überregional",
 					);
+	var $imgs_sel = '//div[@class="pbb-article-text"]/img';
 
 	function parse(&$post, $item)
 	{
@@ -33,13 +34,6 @@ class Brandenburg extends JSON
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
 		$post->text = Utils::clean_text($item->text);
-		if ($item->thumbnail != false) {
-			$pics = array();
-			foreach ($item->images as $img){
-				$pics[] = $this->base_url . $img;
-			}
-			$post->picture = implode("\n", $pics);
-		}
 	}
 
 	function get_items()
