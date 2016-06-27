@@ -18,7 +18,8 @@ class Zoll extends XML
 		}
 		$txt = implode("", $txt);
 		if (trim($txt) == '') {
-			return trim($xpath->query('id("main")')[0]->nodeValue);
+			$elm = $xpath->query('id("main")');
+			return trim($elm[0]->nodeValue);
 		}
 		return $txt;
 	}

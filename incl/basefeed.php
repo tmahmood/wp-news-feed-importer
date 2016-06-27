@@ -23,7 +23,7 @@ class Basefeed
 		return isset($this->custom_image_src) && $this->custom_image_src;
 	}
 
-	function get_image($xpath, $callback=false)
+	function get_image($xpath)
 	{
 		$images = $xpath->query($this->imgs_sel);
 		if (count($images) == 0) {
@@ -31,6 +31,10 @@ class Basefeed
 		}
 		$imgs = array();
 		$added = array();
+		list($storepath, $imgsrcpath) = Utils::get_base_url($this->base_url);
+		if (!file_exists($storepath)) {
+			mkdir($storepath, 0777, true);
+		}
 		foreach ($images as $imgelm){
 			if ($this->call_custom_image_parsing()) {
 				$imgsrc = $this->get_image_custom($imgelm);
@@ -54,12 +58,18 @@ class Basefeed
 					$imgurl = $this->base_url . $imgsrc;
 				}
 			}
+			$filename = md5($imgsrc);
+			$filepath = $storepath . $filename;
+			$filesrc  = $imgsrcpath . $filename;
+			$imgs[] = sprintf('<img src="%s">', $filesrc);
 			if ($is_data) {
-				$imgs[] = sprintf('<img src="%s">', $imgsrc);
+				$v = explode(',', $imgsrc);
+				$imgdata = imagecreatefromstring(array_pop($v));
+				file_put_contents($filepath, $imgdata);
 			} else {
-				$img = file_get_contents($imgurl);
-				if ($img != null) {
-					$imgs[] = sprintf('<img src="data:image/jpg;base64,%s">', base64_encode($img));
+				$imgcontent = file_get_contents($imgurl);
+				if ($imgcontent != null) {
+					file_put_contents($filepath, $imgcontent);
 				}
 			}
 		}

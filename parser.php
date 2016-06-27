@@ -1,6 +1,8 @@
 <?php
 define('DEBUG', file_exists('.git'));
 define('SCRIPT_ABSPATH', __dir__);
+define('IMG_STORE_PATH', __dir__ . '/imgs/');
+define('IMG_SRC_PATH', '/feed_parser/imgs/');
 include_once "incl/bootstrap.php";
 
 // considering our app is inside WordPress directory
@@ -14,9 +16,18 @@ date_default_timezone_set('Europe/Berlin');
 $posts = array();
 if (count($argv) > 1) {
 	$cls = $argv[1];
-	$feed = new BlogFeed($cls);
-	$feed->parse_feed();
-	$posts = $feed->posts;
+	$parts = explode(',', $cls);
+	if (count($parts) > 1) {
+		foreach ($parts as $part){
+			$feed = new BlogFeed($part);
+			$feed->parse_feed();
+			$posts = array_merge($feed->posts, $posts);
+		}
+	} else {
+		$feed = new BlogFeed($cls);
+		$feed->parse_feed();
+		$posts = $feed->posts;
+	}
 } else {
 	$ar = array('Berlin', 'Polizei', 'Presse', 'Saarland',
 				'Zoll', 'Sachsen', 'Brandenburg');
@@ -40,6 +51,7 @@ if (DEBUG) {
 	$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 	foreach ($posts as $post){
 		$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+		$content = str_replace('/feed_parser/', '', $content);
 		print ("$content\n\n");
 	}
 	exit();

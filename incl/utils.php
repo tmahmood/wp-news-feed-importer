@@ -15,10 +15,8 @@ class Utils
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
-
 		$output = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -67,6 +65,14 @@ class Utils
 			mkdir($fullpath, 0777, true);
 		}
 		return "$fullpath/$filename";
+	}
+
+	public static function get_base_url($url)
+	{
+		$uobj = parse_url($url);
+		$stpath = sprintf("%s%s/", IMG_STORE_PATH, $uobj['host']);
+		$srpath = sprintf("%s%s/", IMG_SRC_PATH, $uobj['host']);
+		return array($stpath, $srpath);
 	}
 }
 

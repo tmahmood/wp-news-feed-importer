@@ -19,4 +19,9 @@ class Presse extends XML
 		$txt = implode("", $txt);
 		return Utils::clean_text($txt);
 	}
+
+	function get_missing_title($xpath, &$post)
+	{
+
+	}
 }
