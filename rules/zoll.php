@@ -16,7 +16,7 @@ class Zoll extends XML
 		foreach ($elements as $ky=>$element){
 			$txt[] = $element->nodeValue;
 		}
-		$txt = implode("", $txt);
+		$txt = implode("\n", $txt);
 		if (trim($txt) == '') {
 			$elm = $xpath->query('id("main")');
 			return trim($elm[0]->nodeValue);

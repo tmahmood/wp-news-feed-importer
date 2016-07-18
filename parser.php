@@ -62,21 +62,21 @@ require_once WORDPRESS_PATH .'/wp-load.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
 
-$user_id = 1;
+$user_id = 9;
 $tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
 	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
-	if (post_exists($post->title, $content) !== 0) {
+	if (post_exists($post->title, $content . '_') !== 0) {
 		echo "POST EXISTS\n";
 		continue;
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
 				'post_content'  => $content,
-				'post_date'     => date('Y-m-d H:i:s'),
 				'post_author'   => $user_id,
 				'post_type'     => 'post',
 				'post_status'   => 'publish',
+				'tax_input'		=> array('polizei report'),
 				));
 	if($id) {
 		// Set category - create if it doesn't exist yet
