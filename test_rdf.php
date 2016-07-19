@@ -24,4 +24,4 @@ $post->category = null;
 $xpath = $feed->get_page_obj($post);
 $blogfeed->parse_source_link($post);
 $blogfeed->fill_missing_data($xpath, $post);
-Utils::d($post);
+echo $post->content;

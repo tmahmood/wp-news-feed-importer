@@ -37,8 +37,21 @@ class Polizei extends RDF
 
 	function get_missing_text($xpath, $post)
 	{
-		$startpoint = $xpath->query('//h1')->item(0);
-		$parent = $startpoint->parentNode;vi
+		$currentnode = $xpath->query('//h1')->item(0);
+		$parent = $currentnode->parentNode;
+		$innerhtml = array();
+		while ($currentnode) {
+			if($this->stop_adding($currentnode)) {
+				break;
+			}
+			if ($this->should_ignore($currentnode)) {
+				$currentnode = $currentnode->nextSibling;
+				continue;
+			}
+			$innerhtml[] = $parent->ownerDocument->saveHTML($currentnode);
+			$currentnode = $currentnode->nextSibling;
+		}
+		$post->content = trim(implode("", $innerhtml));
 	}
 
 	function get_content($xpath)
@@ -46,26 +59,55 @@ class Polizei extends RDF
 		$text = array();
 		$textbody = $xpath->query('//p[@class="inhaltText"]')->item(0)->parentNode;
 		$childNodes = $textbody->childNodes;
-		$innerHTML = array();
+		$innerhtml = array();
 		$indx = 0;
 		foreach ($childNodes as $indx => $child) {
 			if ($child->nodeName == 'h1') {
-				$innerHTML[] = $textbody->ownerDocument->saveHTML($child);
+				$innerhtml[] = $textbody->ownerDocument->saveHTML($child);
 				break;
 			}
 		}
 		++$indx;
 		for (;$indx < $childNodes->length; ++$indx){
 			$child = $childNodes->item($indx);
-			if ($child->nodeName != '#text' && $child->hasAttribute('class')) {
-				$cls = $child->getAttribute('class');
-				if ($cls == 'inhaltFooter') {
-					break;
-				}
+			if($this->stop_adding($child)) {
+				break;
 			}
-			$innerHTML[] = $textbody->ownerDocument->saveHTML($child);
+			if ($this->should_ignore($child)) {
+				continue;
+			}
+			$innerhtml[] = $textbody->ownerDocument->saveHTML($child);
 		}
-		return implode("", $innerHTML);
+		return implode("", $innerhtml);
+	}
+
+
+	function should_ignore($child)
+	{
+		if ($child->nodeName == '#text' ||
+			$child->nodeName == '#comment' ||
+			$child->nodeName == '#script' ||
+			$child->nodeName == '#style') {
+			return true;
+		}
+		if (method_exists($child, 'getAttribute')) {
+			$cls = $child->getAttribute('class');
+			if ($cls == 'inhaltBilderZoom') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function stop_adding($child)
+	{
+		if(method_exists($child, 'getAttribute')) {
+			$cls = $child->getAttribute('class');
+			if ($cls == 'inhaltFooter') {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function get_missing_title($xpath, &$post)

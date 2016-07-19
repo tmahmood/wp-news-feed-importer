@@ -49,6 +49,10 @@ class RDF extends Basefeed
 	{
 		$doc = new DOMDocument();
 		@$doc->loadHTMLFile($post->link);
+		// remove scripts
+		while (($r = $doc->getElementsByTagName("script")) && $r->length) {
+			$r->item(0)->parentNode->removeChild($r->item(0));
+		}
 		return new DOMXpath($doc);
 	}
 
