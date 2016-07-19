@@ -74,5 +74,20 @@ class Utils
 		$srpath = sprintf("%s%s/", IMG_SRC_PATH, $uobj['host']);
 		return array($stpath, $srpath);
 	}
+
+
+	public static function d($elm, $vd=false)
+	{
+		echo '<pre>';
+		if (is_object($elm)) {
+			var_dump($elm);
+		} elseif(is_array($elm)) {
+			print_r($elm);
+		} else {
+			print($elm);
+		}
+		echo '</pre>';
+	}
+
 }
 

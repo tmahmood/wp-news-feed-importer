@@ -52,7 +52,7 @@ if (DEBUG) {
 	foreach ($posts as $post){
 		$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
 		$content = str_replace('/feed_parser/', '', $content);
-		print ("$content\n\n");
+		print ("$content\n<hr>\n");
 	}
 	exit();
 }
@@ -66,9 +66,13 @@ $user_id = 9;
 $tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
 	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
-	if (post_exists($post->title, $content . '_') !== 0) {
+	if (post_exists($post->title, $content) !== 0) {
 		echo "POST EXISTS\n";
 		continue;
+	}
+	$category_id = category_exists($cat_name);
+	if (!$id) {
+		$category_id = wp_create_category($post->category);
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
@@ -79,8 +83,7 @@ foreach ($posts as $post){
 				'tax_input'		=> array('polizei report'),
 				));
 	if($id) {
-		// Set category - create if it doesn't exist yet
-		wp_set_post_terms($id, wp_create_category($post->category), 'category');
+		wp_set_post_terms($id, $category_id, 'category');
 	} else {
 		echo "WARNING: Failed to insert post into WordPress\n";
 	}

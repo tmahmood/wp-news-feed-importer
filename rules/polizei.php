@@ -35,19 +35,30 @@ class Polizei extends RDF
 	var $imgs_sel = '//div[@class="inhaltBilderZoom"]/a';
 	var $custom_image_src = true;
 
+	function get_missing_text($xpath, $post)
+	{
+		Utils::d($post);
+	}
+
 	function get_content($xpath)
 	{
 		$text = array();
-		$elm = $xpath->query('//p[@class="inhaltText"]')->item(0);
-		$text[] = $elm->nodeValue;
-		while ($elm = $elm->nextSibling) {
-			$t = trim($elm->nodeValue);
-			if ($t != '') {
-				$text[] = $t;
+		$textbody = $xpath->query('//p[@class="inhaltText"]')->item(0)->parentNode;
+		$childNodes = $textbody->childNodes;
+		$innerHTML = array();
+		$indx = 0;
+		foreach ($childNodes as $indx => $child) {
+			if ($child->nodeName == 'h1') {
+				$innerHTML[] = $textbody->ownerDocument->saveHTML($child);
+				break;
 			}
 		}
-		$txt = implode("", $text);
-		return Utils::clean_text($txt);
+		++$indx;
+		for (;$indx < $childNodes->length - 1; ++$indx){
+			$child = $childNodes->item($indx);
+			$innerHTML[] = $textbody->ownerDocument->saveHTML($child);
+		}
+		return implode("\n", $innerHTML);
 	}
 
 	function get_missing_title($xpath, &$post)
