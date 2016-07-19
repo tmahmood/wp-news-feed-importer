@@ -48,12 +48,15 @@ foreach($functions as $function) {
 }
 
 if (DEBUG) {
+	$html = ["\xEF\xBB\xBF", '<!DOCTYPE html>'];
 	$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 	foreach ($posts as $post){
-		$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+		$content = sprintf($tmpl, $post->picture, utf8_encode($post->text), $post->link);
 		$content = str_replace('/feed_parser/', '', $content);
-		print ("$content\n<hr>\n");
+		$html[] = $content;
+		$html[] = '<hr>';
 	}
+	file_put_contents('out.html', implode('', $html));
 	exit();
 }
 
@@ -65,7 +68,7 @@ require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
 $user_id = 9;
 $tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
-	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+	$content = sprintf($tmpl, $post->picture, utf8_encode($post->text), $post->link);
 	if (post_exists($post->title, $content) !== 0) {
 		echo "POST EXISTS\n";
 		continue;
@@ -76,7 +79,7 @@ foreach ($posts as $post){
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
-				'post_content'  => $content,
+				'post_content'  => utf8_encode($content),
 				'post_author'   => $user_id,
 				'post_type'     => 'post',
 				'post_status'   => 'publish',

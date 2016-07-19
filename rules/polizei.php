@@ -37,7 +37,8 @@ class Polizei extends RDF
 
 	function get_missing_text($xpath, $post)
 	{
-		Utils::d($post);
+		$startpoint = $xpath->query('//h1')->item(0);
+		$parent = $startpoint->parentNode;vi
 	}
 
 	function get_content($xpath)
@@ -54,11 +55,17 @@ class Polizei extends RDF
 			}
 		}
 		++$indx;
-		for (;$indx < $childNodes->length - 1; ++$indx){
+		for (;$indx < $childNodes->length; ++$indx){
 			$child = $childNodes->item($indx);
+			if ($child->nodeName != '#text' && $child->hasAttribute('class')) {
+				$cls = $child->getAttribute('class');
+				if ($cls == 'inhaltFooter') {
+					break;
+				}
+			}
 			$innerHTML[] = $textbody->ownerDocument->saveHTML($child);
 		}
-		return implode("\n", $innerHTML);
+		return implode("", $innerHTML);
 	}
 
 	function get_missing_title($xpath, &$post)

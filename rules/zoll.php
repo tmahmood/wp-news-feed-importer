@@ -6,17 +6,21 @@ class Zoll extends XML
 	var $category = "Zoll Deutschland (Bundesweite Meldungen des Dienstes “Zoll im Fokus”)";
 	var $feed_url = "http://www.zoll.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSSZollImFokus.xml";
 	var $text_cnt = 'id("main")/p';
-	var $imgs_sel = 'id("main")//img';
+	var $imgs_sel = '//span[@class="zoom"]/a';
 	var $custom_image_src = true;
 
 	function get_content($xpath)
 	{
-		$elements = $xpath->query($this->text_cnt);
 		$txt = array();
-		foreach ($elements as $ky=>$element){
-			$txt[] = $element->nodeValue;
+		$textbody = $xpath->query($this->text_cnt)->item(0)->parentNode;
+		$childNodes = $textbody->childNodes;
+		foreach ($childNodes as $ky=>$child){
+			if($this->should_not_continue($child)) {
+				continue;
+			}
+			$txt[] = $textbody->ownerDocument->saveHTML($child);
 		}
-		$txt = implode("\n", $txt);
+		$txt = implode("<br>", $txt);
 		if (trim($txt) == '') {
 			$elm = $xpath->query('id("main")');
 			return trim($elm[0]->nodeValue);
@@ -24,16 +28,39 @@ class Zoll extends XML
 		return $txt;
 	}
 
+	function should_not_continue($child)
+	{
+		$skip = false;
+		if ($child->nodeName == 'div' && $child->hasChildNodes()) {
+			foreach($child->childNodes as $innerchild) {
+				if ($innerchild->nodeName == 'p'
+					&& $innerchild->hasAttribute('class')) {
+					$cls = $innerchild->getAttribute('class');
+					if ($cls == 'picture rechts'
+						|| $cls == 'picture links') {
+						$skip = true;
+						break;
+					}
+				}
+			}
+			if ($skip) {
+				return true;
+			}
+		}
+		if($child->nodeName =='span' && $child->hasAttribute('class')) {
+			$cls = $child->getAttribute('class');
+			if($cls == 'directURL') {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function get_image_custom($imgelm)
 	{
-		$src = $imgelm->getAttribute('src');
-		$fullurl = str_replace('__blob=wide', '__blob=normal', $src);
+		$fullurl = $imgelm->getAttribute('href');
 		if (!$this->is_full_url($fullurl)) {
 			$fullurl = $this->base_url . $fullurl;
-		}
-		$headers = get_headers($fullurl);
-		if (strpos($headers[0], '404') > 0) {
-			return $src;
 		}
 		return $fullurl;
 	}
