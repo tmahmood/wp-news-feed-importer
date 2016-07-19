@@ -48,7 +48,7 @@ foreach($functions as $function) {
 }
 
 if (DEBUG) {
-	$html = ["\xEF\xBB\xBF", '<!DOCTYPE html>'];
+	$html = array("\xEF\xBB\xBF", '<!DOCTYPE html>');
 	$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 	foreach ($posts as $post){
 		$content = sprintf($tmpl, $post->picture, utf8_encode($post->text), $post->link);
@@ -64,25 +64,27 @@ if (DEBUG) {
 require_once WORDPRESS_PATH .'/wp-load.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
+require_once WORDPRESS_PATH .'/wp-admin/includes/media.php';
+
 
 $user_id = 9;
 $tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
-	$content = sprintf($tmpl, $post->picture, utf8_encode($post->text), $post->link);
+	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
 	if (post_exists($post->title, $content) !== 0) {
 		echo "POST EXISTS\n";
 		continue;
 	}
 	$category_id = category_exists($cat_name);
-	if (!$id) {
+	if (!$category_id) {
 		$category_id = wp_create_category($post->category);
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
-				'post_content'  => utf8_encode($content),
+				'post_content'  => $content,
 				'post_author'   => $user_id,
 				'post_type'     => 'post',
-				'post_status'   => 'publish',
+				'post_status'   => 'draft',
 				'tax_input'		=> array('polizei report'),
 				));
 	if($id) {

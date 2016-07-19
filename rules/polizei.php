@@ -37,7 +37,7 @@ class Polizei extends RDF
 
 	function get_missing_text($xpath, $post)
 	{
-		$currentnode = $xpath->query('//h1')->item(0);
+		$currentnode = $xpath->query('//h1')->item(0)->nextSibling;
 		$parent = $currentnode->parentNode;
 		$innerhtml = array();
 		while ($currentnode) {
@@ -48,7 +48,7 @@ class Polizei extends RDF
 				$currentnode = $currentnode->nextSibling;
 				continue;
 			}
-			$innerhtml[] = $parent->ownerDocument->saveHTML($currentnode);
+			$innerhtml[] = $parent->ownerDocument->saveXML($currentnode);
 			$currentnode = $currentnode->nextSibling;
 		}
 		$post->content = trim(implode("", $innerhtml));
@@ -63,7 +63,7 @@ class Polizei extends RDF
 		$indx = 0;
 		foreach ($childNodes as $indx => $child) {
 			if ($child->nodeName == 'h1') {
-				$innerhtml[] = $textbody->ownerDocument->saveHTML($child);
+				$innerhtml[] = $textbody->ownerDocument->saveXML($child);
 				break;
 			}
 		}
@@ -76,7 +76,7 @@ class Polizei extends RDF
 			if ($this->should_ignore($child)) {
 				continue;
 			}
-			$innerhtml[] = $textbody->ownerDocument->saveHTML($child);
+			$innerhtml[] = $textbody->ownerDocument->saveXML($child);
 		}
 		return implode("", $innerhtml);
 	}
@@ -85,7 +85,6 @@ class Polizei extends RDF
 	function should_ignore($child)
 	{
 		if ($child->nodeName == '#text' ||
-			$child->nodeName == '#comment' ||
 			$child->nodeName == '#script' ||
 			$child->nodeName == '#style') {
 			return true;

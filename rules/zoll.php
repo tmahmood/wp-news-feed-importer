@@ -18,7 +18,7 @@ class Zoll extends XML
 			if($this->should_not_continue($child)) {
 				continue;
 			}
-			$txt[] = $textbody->ownerDocument->saveHTML($child);
+			$txt[] = $textbody->ownerDocument->saveXML($child);
 		}
 		$txt = implode("<br>", $txt);
 		if (trim($txt) == '') {
