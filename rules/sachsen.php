@@ -19,7 +19,8 @@ class Sachsen extends XML
 		if ($elements == null) {
 			return '';
 		}
-		return Utils::clean_text($elements->nodeValue);
+		$txt = $elements->parentNode->ownerDocument->saveXML($elements);
+		return $txt;
 	}
 
 	function get_missing_category($xpath, &$post)
