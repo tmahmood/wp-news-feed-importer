@@ -12,16 +12,36 @@ define('WORDPRESS_PATH', implode('/', $parts));
 // Set the timezone so times are calculated correctly
 date_default_timezone_set('Europe/Berlin');
 
-$link = 'http://www.polizei.bayern.de/fahndung/personen/straftaeter/unbekannt/index.html/243670';
+function test_rdf()
+{
+	$link = 'http://www.polizei.bayern.de/fahndung/personen/straftaeter/unbekannt/index.html/243670';
+	$blogfeed = new BlogFeed('Polizei');
+	$feed = new Polizei;
+	$post = new BlogPost;
+	$post->title = null;
+	$post->link = $link;
+	$post->date  = null;
+	$post->category = null;
+	$xpath = $feed->get_page_obj($post);
+	$blogfeed->parse_source_link($post);
+	$blogfeed->fill_missing_data($xpath, $post);
+	echo $post->content;
+}
 
-$blogfeed = new BlogFeed('Polizei');
-$feed = new Polizei;
-$post = new BlogPost;
-$post->title = null;
-$post->link = $link;
-$post->date  = null;
-$post->category = null;
-$xpath = $feed->get_page_obj($post);
-$blogfeed->parse_source_link($post);
-$blogfeed->fill_missing_data($xpath, $post);
-echo $post->content;
+function test_berlin()
+{
+	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.491230.php';
+	$blogfeed = new BlogFeed('Berlin');
+	$feed = new Berlin;
+	$post = new BlogPost;
+	$post->title = null;
+	$post->link = $link;
+	$post->date  = null;
+	$post->category = null;
+	$xpath = $feed->get_page_obj($post);
+	$blogfeed->parse_source_link($post);
+	echo $post->content;
+}
+
+test_berlin();
+
