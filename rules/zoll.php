@@ -6,13 +6,22 @@ class Zoll extends XML
 	var $category = "Zoll Deutschland (Bundesweite Meldungen des Dienstes “Zoll im Fokus”)";
 	var $feed_url = "http://www.zoll.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSSZollImFokus.xml";
 	var $text_cnt = 'id("main")/p';
-	var $imgs_sel = '//span[@class="zoom"]/a';
+	var $imgs_sel = array('//span[@class="zoom"]/a', '//dl[@class="photo"]//a');
 	var $custom_image_src = true;
 
 	function get_content($xpath)
 	{
 		$txt = array();
 		$textbody = $xpath->query($this->text_cnt)->item(0)->parentNode;
+		$tobe_removed = array();
+		foreach ($textbody->getElementsByTagName('a') as $link){
+			$tobe_removed[] = $link;
+		}
+		foreach ($tobe_removed as $link){
+			$link->parentNode->removeChild($link);
+		}
+		$h1 = $textbody->getElementsByTagName('h1')->item(0);
+		$h1->parentNode->removeChild($h1);
 		$txt = $this->_get_inner_html($textbody);
 		if (trim($txt) == '') {
 			$elm = $xpath->query('id("main")');
@@ -57,6 +66,11 @@ class Zoll extends XML
 	{
 		if ($this->is_div_with_class($child)) {
 			return true;
+		}
+		if ($this->is_elm_with_class($child, 'p')) {
+			if($child->getAttribute('class') == 'navToTop') {
+				return true;
+			}
 		}
 		if ($child->nodeName == 'div' && $child->hasChildNodes()) {
 			foreach($child->childNodes as $innerchild) {

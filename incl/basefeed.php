@@ -23,8 +23,21 @@ class Basefeed
 
 	function get_image($xpath)
 	{
-		$images = $xpath->query($this->imgs_sel);
-		if (count($images) == 0) {
+		$images = array();
+		$count_images = 0;
+		if (is_array($this->imgs_sel)) {
+			foreach ($this->imgs_sel as $sel){
+				$imglist = $xpath->query($sel);
+				foreach ($imglist as $img){
+					$images[] = $img;
+				}
+			}
+			$count_images = count($images);
+		} else {
+			$images = $xpath->query($this->imgs_sel);
+			$count_images = $images->length;
+		}
+		if ($count_images == 0) {
 			return "";
 		}
 		$imgs = array();
@@ -64,12 +77,10 @@ class Basefeed
 				$imgdata = imagecreatefromstring(array_pop($v));
 				file_put_contents($filepath, $imgdata);
 			} else {
-				$imgs[] = $imgurl;
-				continue;
-				# $imgcontent = file_get_contents($imgurl);
-				# if ($imgcontent != null) {
-				# 	file_put_contents($filepath, $imgcontent);
-				# }
+				$imgcontent = file_get_contents($imgurl);
+				if ($imgcontent != null) {
+					file_put_contents($filepath, $imgcontent);
+				}
 			}
 			$r = exif_imagetype($filepath);
 			if ($r == IMAGETYPE_JPEG) {

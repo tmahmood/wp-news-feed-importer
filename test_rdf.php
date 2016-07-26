@@ -30,7 +30,7 @@ function test_rdf()
 
 function test_berlin()
 {
-	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.502335.php';
+	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.501514.php';
 	$blogfeed = new BlogFeed('Berlin');
 	$feed = new Berlin;
 	$post = new BlogPost;
@@ -40,8 +40,25 @@ function test_berlin()
 	$post->category = "Berlin (Polizei)";
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
-	echo $post->text;
+	print_r ($post->picture);
 }
+
+function test_zoll()
+{
+	$link = 'http://www.zoll.de/SharedDocs/Pressemitteilungen/DE/Produktpiraterie/2016/z83_plagiate_h.html';
+	// $link = 'http://www.zoll.de/SharedDocs/Pressemitteilungen/DE/Sonstiges/2016/z12_horb_schroeder_stuttgart.html';
+	$blogfeed = new BlogFeed('Zoll');
+	$feed = new Zoll;
+	$post = new BlogPost;
+	$post->title = 'title';
+	$post->link = $link;
+	$post->date = 'd';
+	$post->category = "Zoll Deutschland (Bundesweite Meldungen des Dienstes “Zoll im Fokus”)";
+	$xpath = $feed->get_page_obj($post);
+	$blogfeed->parse_source_link($post);
+	Utils::d($post->picture);
+}
+
 
 test_berlin();
 

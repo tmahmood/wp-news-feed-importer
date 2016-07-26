@@ -81,9 +81,31 @@ foreach ($posts as $post){
 		wp_set_post_terms($id, $category_id, 'category');
 	} else {
 		echo "WARNING: Failed to insert post into WordPress\n";
+		continue;
 	}
-	Utils::d($post->picture);
-	foreach ($post->picture as $pic){
-		Utils::upload_to_wordpress($pic, $id);
+	$cnt_pictures = count($post->picture);
+	if (!is_array($post->picture) || $cnt_pictures == 0) {
+		continue;
 	}
+	$imgs = array();
+	foreach ($post->picture as $ky=>$pic){
+		$attachment_id = Utils::upload_to_wordpress($pic, $id);
+		if ($attachment_id == null) {
+			continue;
+		}
+		$wp_img = wp_get_attachment_link($attachment_id);
+		if ($ky < $cnt_pictures - 1) {
+			$wp_img = str_replace('class="', 'class="alignleft ', $wp_img);
+		}
+		$imgs[] = $wp_img;
+	}
+	if (count($imgs) == 0) {
+		continue;
+	}
+	$imgs_txt = implode("", $imgs);
+	$content = sprintf("%s<br><br>%s", $imgs_txt, $content);
+	wp_update_post(array(
+		'ID' =>  $id,
+		'post_content' => $content,
+	));
 }

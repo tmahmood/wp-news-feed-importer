@@ -107,10 +107,9 @@ class Utils
 				$attachment_data = wp_generate_attachment_metadata($attachment_id,
 																   $upload_file['file']);
 				wp_update_attachment_metadata( $attachment_id,  $attachment_data );
+				add_post_meta($parent_post_id, 'article_images', $attachment_id, true);
 			}
-			return wp_attachment_url($attachment_id);
-		} else {
-			Utils::d($upload_file);
+			return $attachment_id;
 		}
 	}
 
@@ -143,9 +142,6 @@ class Utils
 			@unlink($file_array['tmp_name']);
 			return $id;
 		}
-
-		$src = wp_get_attachment_url( $id );
-
 	}
 }
 
