@@ -63,7 +63,6 @@ class Polizei extends RDF
 		$indx = 0;
 		foreach ($childNodes as $indx => $child) {
 			if ($child->nodeName == 'h1') {
-				$innerhtml[] = $textbody->ownerDocument->saveXML($child);
 				break;
 			}
 		}
@@ -87,6 +86,9 @@ class Polizei extends RDF
 		if ($child->nodeName == '#text' ||
 			$child->nodeName == '#script' ||
 			$child->nodeName == '#style') {
+			return true;
+		}
+		if($child->nodeName == 'table' && trim($child->nodeValue) == '') {
 			return true;
 		}
 		if (method_exists($child, 'getAttribute')) {

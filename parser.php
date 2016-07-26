@@ -1,12 +1,14 @@
 <?php
 define('DEBUG', file_exists('.git'));
-define('SCRIPT_ABSPATH', __dir__);
-define('IMG_STORE_PATH', __dir__ . '/imgs/');
-define('IMG_SRC_PATH', '/feed_parser/imgs/');
+define('SCRIPT_ABSPATH', '/home/mahmood/Projects/leonardos_t/wordpress/feed_parser');
+
+$paths = explode("\n", file_get_contents(SCRIPT_ABSPATH . '/.paths'));
+define('IMG_STORE_PATH', __dir__ . $paths[0]);
+define('IMG_SRC_PATH', $paths[1]);
 include_once "incl/bootstrap.php";
 
 // considering our app is inside WordPress directory
-$parts = explode('/', __dir__);
+$parts = explode('/', SCRIPT_ABSPATH);
 array_pop($parts);
 define('WORDPRESS_PATH', implode('/', $parts));
 // Set the timezone so times are calculated correctly
@@ -47,30 +49,18 @@ foreach($functions as $function) {
 	spl_autoload_unregister($function);
 }
 
-if (DEBUG) {
-	$html = array("\xEF\xBB\xBF", '<!DOCTYPE html>');
-	$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
-	foreach ($posts as $post){
-		$content = sprintf($tmpl, $post->picture, utf8_encode($post->text), $post->link);
-		$content = str_replace('/feed_parser/', '', $content);
-		$html[] = $content;
-		$html[] = '<hr>';
-	}
-	file_put_contents('out.html', implode('', $html));
-	exit();
-}
-
 // Load WordPress
 require_once WORDPRESS_PATH .'/wp-load.php';
+require_once WORDPRESS_PATH .'/wp-admin/includes/post.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/taxonomy.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/file.php';
 require_once WORDPRESS_PATH .'/wp-admin/includes/media.php';
 
 
 $user_id = 9;
-$tmpl = '%s<br>%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
+$tmpl = '%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
-	$content = sprintf($tmpl, $post->picture, $post->text, $post->link);
+	$content = sprintf($tmpl, $post->text, $post->link);
 	if (post_exists($post->title, $content) !== 0) {
 		echo "POST EXISTS\n";
 		continue;
@@ -91,5 +81,9 @@ foreach ($posts as $post){
 		wp_set_post_terms($id, $category_id, 'category');
 	} else {
 		echo "WARNING: Failed to insert post into WordPress\n";
+	}
+	Utils::d($post->picture);
+	foreach ($post->picture as $pic){
+		Utils::upload_to_wordpress($pic, $id);
 	}
 }

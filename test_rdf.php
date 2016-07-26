@@ -30,17 +30,17 @@ function test_rdf()
 
 function test_berlin()
 {
-	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.491230.php';
+	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.502335.php';
 	$blogfeed = new BlogFeed('Berlin');
 	$feed = new Berlin;
 	$post = new BlogPost;
-	$post->title = null;
+	$post->title = 'sd';
 	$post->link = $link;
-	$post->date  = null;
-	$post->category = null;
+	$post->date  = 'sd';
+	$post->category = "Berlin (Polizei)";
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
-	echo $post->content;
+	echo $post->text;
 }
 
 test_berlin();

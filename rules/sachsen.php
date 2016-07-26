@@ -15,13 +15,21 @@ class Sachsen extends XML
 
 	function get_content($xpath)
 	{
-		$elements = $xpath->query($this->txt_selector)->item(0);
-		if ($elements == null) {
+		$content_div = $xpath->query($this->txt_selector)->item(0);
+		if ($content_div == null) {
 			return '';
 		}
-		$txt = $elements->parentNode->ownerDocument->saveXML($elements);
-		return $txt;
+		return $this->_get_inner_html($content_div);
 	}
+
+	function ignore_content($node)
+	{
+		if ($node->nodeName == 'strong') {
+			return true;
+		}
+		return false;
+	}
+
 
 	function get_missing_category($xpath, &$post)
 	{

@@ -12,13 +12,18 @@ class Presse extends XML
 	function get_content($xpath)
 	{
 		$elements = $xpath->query($this->text_cnt);
-		$txt = array();
-		foreach ($elements as $ky=>$element){
-			$txt[] = $element->nodeValue;
-		}
-		$txt = implode("", $txt);
-		return Utils::clean_text($txt);
+		$textbody = $elements->item(0)->parentNode;
+		return $this->_get_inner_html($textbody);
 	}
+
+	function ignore_content($node)
+	{
+		if ($node->nodeName == 'img') {
+			return true;
+		}
+		return false;
+	}
+
 
 	function get_missing_title($xpath, &$post)
 	{

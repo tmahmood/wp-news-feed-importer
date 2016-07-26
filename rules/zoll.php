@@ -13,14 +13,7 @@ class Zoll extends XML
 	{
 		$txt = array();
 		$textbody = $xpath->query($this->text_cnt)->item(0)->parentNode;
-		$childNodes = $textbody->childNodes;
-		foreach ($childNodes as $ky=>$child){
-			if($this->should_not_continue($child)) {
-				continue;
-			}
-			$txt[] = $textbody->ownerDocument->saveXML($child);
-		}
-		$txt = implode("<br>", $txt);
+		$txt = $this->_get_inner_html($textbody);
 		if (trim($txt) == '') {
 			$elm = $xpath->query('id("main")');
 			return trim($elm[0]->nodeValue);
@@ -28,30 +21,52 @@ class Zoll extends XML
 		return $txt;
 	}
 
-	function should_not_continue($child)
+	private function is_p_with_a_picture($innerchild)
 	{
-		$skip = false;
+		$s = $this->is_elm_with_class($innerchild, 'p');
+		if ($s) {
+			$cls = $innerchild->getAttribute('class');
+			return $cls == 'picture rechts' || $cls == 'picture links';
+		}
+		return false;
+	}
+
+	private function is_directurl_span($child)
+	{
+		if (!($child->nodeName =='span' && $child->hasAttribute('class'))) {
+			return false;
+		}
+		$cls = $child->getAttribute('class');
+		if($cls == 'directURL') {
+			return true;
+		}
+	}
+
+	private function is_div_with_class($child)
+	{
+		if(!($child->nodeName =='div' && $child->hasAttribute('class'))) {
+			return false;
+		}
+		if ($child->getAttribute('class') == 'gallery') {
+			return true;
+		}
+		return false;
+	}
+
+	function ignore_content($child)
+	{
+		if ($this->is_div_with_class($child)) {
+			return true;
+		}
 		if ($child->nodeName == 'div' && $child->hasChildNodes()) {
 			foreach($child->childNodes as $innerchild) {
-				if ($innerchild->nodeName == 'p'
-					&& $innerchild->hasAttribute('class')) {
-					$cls = $innerchild->getAttribute('class');
-					if ($cls == 'picture rechts'
-						|| $cls == 'picture links') {
-						$skip = true;
-						break;
-					}
+				if ($this->is_p_with_a_picture($innerchild)) {
+					return true;
 				}
 			}
-			if ($skip) {
-				return true;
-			}
 		}
-		if($child->nodeName =='span' && $child->hasAttribute('class')) {
-			$cls = $child->getAttribute('class');
-			if($cls == 'directURL') {
-				return true;
-			}
+		if($this->is_directurl_span($child)) {
+			return true;
 		}
 		return false;
 	}

@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Basefeed
 {
 	var $img_root;
@@ -60,20 +58,52 @@ class Basefeed
 			}
 			$filename = md5($imgsrc);
 			$filepath = $storepath . $filename;
-			$filesrc  = $imgsrcpath . $filename;
-			$imgs[] = sprintf('<img src="%s">', $filesrc);
+			$filesrc  = $imgsrcpath. $filename;
 			if ($is_data) {
 				$v = explode(',', $imgsrc);
 				$imgdata = imagecreatefromstring(array_pop($v));
 				file_put_contents($filepath, $imgdata);
 			} else {
-				$imgcontent = file_get_contents($imgurl);
-				if ($imgcontent != null) {
-					file_put_contents($filepath, $imgcontent);
-				}
+				$imgs[] = $imgurl;
+				continue;
+				# $imgcontent = file_get_contents($imgurl);
+				# if ($imgcontent != null) {
+				# 	file_put_contents($filepath, $imgcontent);
+				# }
 			}
+			$r = exif_imagetype($filepath);
+			if ($r == IMAGETYPE_JPEG) {
+				$newpath = "$filepath.jpg";
+				rename($filepath, $newpath);
+				$filepath = $newpath;
+			} elseif ($r == IMAGETYPE_PNG) {
+				$newpath = "$filepath.png";
+				rename($filepath, $newpath);
+				$filepath = $newpath;
+			}
+			$imgs[] = $filepath;
 		}
-		return implode("\n", $imgs);
+		return $imgs;
 	}
+
+	protected function _get_inner_html($node)
+	{
+		$txt = array();
+		$childNodes = $node->childNodes;
+		foreach ($childNodes as $ky=>$child){
+			if($this->ignore_content($child)) {
+				continue;
+			}
+			$txt[] = $node->ownerDocument->saveXML($child);
+		}
+		$txt = implode("<br>", $txt);
+		return $txt;
+	}
+
+	protected function is_elm_with_class($node, $nodename)
+	{
+		return $node->nodeName == $nodename && $node->hasAttribute('class');
+	}
+
 }
 

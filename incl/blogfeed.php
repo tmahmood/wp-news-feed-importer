@@ -35,7 +35,7 @@ class BlogFeed
 			return;
 		}
 		$xpath = $this->feed->get_page_obj($post);
-		$post->picture = (string) $this->feed->get_image($xpath);
+		$post->picture = $this->feed->get_image($xpath);
 		$post->text  = (string) $this->feed->get_content($xpath);
 		$this->fill_missing_data($xpath, $post);
 	}
