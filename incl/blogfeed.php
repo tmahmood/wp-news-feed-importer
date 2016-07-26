@@ -20,6 +20,9 @@ class BlogFeed
 		}
         foreach ($items as $item) {
 			$post = new BlogPost;
+			if (isset($this->feed->parent_category)) {
+				$post->parent_category = $this->feed->parent_category;
+			}
 			$this->feed->parse($post, $item);
 			$this->parse_source_link($post);
 			$this->posts[] = $post;

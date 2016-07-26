@@ -1,10 +1,12 @@
 <?php
 define('DEBUG', file_exists('.git'));
-define('SCRIPT_ABSPATH', '/home/mahmood/Projects/leonardos_t/wordpress/feed_parser');
-
-$paths = explode("\n", file_get_contents(SCRIPT_ABSPATH . '/.paths'));
-define('IMG_STORE_PATH', __dir__ . $paths[0]);
-define('IMG_SRC_PATH', $paths[1]);
+if (DEBUG) {
+	define('SCRIPT_ABSPATH', '/home/mahmood/Projects/leonardos_t/wordpress/feed_parser');
+} else {
+	define('SCRIPT_ABSPATH', __dir__);
+}
+define('IMG_STORE_PATH', __dir__ . '/imgs/');
+define('IMG_SRC_PATH', '');
 include_once "incl/bootstrap.php";
 
 // considering our app is inside WordPress directory
@@ -67,7 +69,11 @@ foreach ($posts as $post){
 	}
 	$category_id = category_exists($cat_name);
 	if (!$category_id) {
-		$category_id = wp_create_category($post->category);
+		if (isset($post->parent_category)) {
+			$category_id = wp_create_category($post->category, $post->parent_category);
+		} else {
+			$category_id = wp_create_category($post->category);
+		}
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
