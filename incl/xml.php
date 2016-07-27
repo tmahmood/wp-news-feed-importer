@@ -12,7 +12,6 @@ class XML extends BaseFeed
 
 	function parse(&$post, $item)
 	{
-		$post = new BlogPost();
 		$post->date  = (string) $item->pubDate;
 		$post->link  = (string) $item->link;
 		$post->title = (string) $item->title;

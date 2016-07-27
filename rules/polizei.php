@@ -79,8 +79,7 @@ class Polizei extends RDF
 			$innerhtml[] = $textbody->ownerDocument->saveXML($child);
 		}
 		$txt = implode("", $innerhtml);
-		preg_replace('/<-*.->/', '', $txt);
-		return $text;
+		return preg_replace('/<!-(.*)->/', '', $txt);
 	}
 
 
