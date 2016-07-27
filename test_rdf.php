@@ -74,7 +74,8 @@ function test_polizei()
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
 	Utils::d($post->text);
+	echo preg_replace('/<!-(.*)->/', '', $post->text);
 }
 
-test_berlin();
+test_polizei();
 

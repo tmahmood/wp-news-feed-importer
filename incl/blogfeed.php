@@ -21,6 +21,7 @@ class BlogFeed
         foreach ($items as $item) {
 			$post = new BlogPost;
 			if (isset($this->feed->parent_category)) {
+				print ("has parent\n");
 				$post->parent_category = $this->feed->parent_category;
 			}
 			$this->feed->parse($post, $item);

@@ -8,6 +8,7 @@ class Zoll extends XML
 	var $text_cnt = 'id("main")/p';
 	var $imgs_sel = array('//span[@class="zoom"]/a', '//dl[@class="photo"]//a');
 	var $custom_image_src = true;
+	var $parent_category = 504;
 
 	function get_content($xpath)
 	{

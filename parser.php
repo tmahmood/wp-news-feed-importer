@@ -67,13 +67,10 @@ foreach ($posts as $post){
 		echo "POST EXISTS\n";
 		continue;
 	}
-	$category_id = category_exists($cat_name);
-	if (!$category_id) {
-		if (isset($post->parent_category)) {
-			$category_id = wp_create_category($post->category, $post->parent_category);
-		} else {
-			$category_id = wp_create_category($post->category);
-		}
+	if (isset($post->parent_category)) {
+		$category_id = wp_create_category($post->category, $post->parent_category);
+	} else {
+		$category_id = wp_create_category($post->category);
 	}
 	$id = wp_insert_post(array(
 				'post_title'    => $post->title,
