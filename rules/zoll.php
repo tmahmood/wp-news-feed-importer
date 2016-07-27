@@ -13,13 +13,7 @@ class Zoll extends XML
 	{
 		$txt = array();
 		$textbody = $xpath->query($this->text_cnt)->item(0)->parentNode;
-		$tobe_removed = array();
-		foreach ($textbody->getElementsByTagName('a') as $link){
-			$tobe_removed[] = $link;
-		}
-		foreach ($tobe_removed as $link){
-			$link->parentNode->removeChild($link);
-		}
+		$this->remove_links($textbody);
 		$h1 = $textbody->getElementsByTagName('h1')->item(0);
 		$h1->parentNode->removeChild($h1);
 		$txt = $this->_get_inner_html($textbody);

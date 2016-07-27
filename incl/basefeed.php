@@ -116,5 +116,15 @@ class Basefeed
 		return $node->nodeName == $nodename && $node->hasAttribute('class');
 	}
 
+	function remove_links($parentnode)
+	{
+		$tobe_removed = array();
+		foreach ($parentnode->getElementsByTagName('a') as $link){
+			$tobe_removed[] = $link;
+		}
+		foreach ($tobe_removed as $link){
+			$link->parentNode->removeChild($link);
+		}
+	}
 }
 

@@ -60,5 +60,21 @@ function test_zoll()
 }
 
 
+
+function test_polizei()
+{
+	$link = 'http://www.polizei.bayern.de/oberfranken/fahndung/personen/tote/index.html/245358';
+	$blogfeed = new BlogFeed('Polizei');
+	$feed = new Polizei;
+	$post = new BlogPost;
+	$post->title = 'title';
+	$post->link = $link;
+	$post->date = 'd';
+	$post->category = "Bayreuth (Polizeipräsidium Oberfranken)";
+	$xpath = $feed->get_page_obj($post);
+	$blogfeed->parse_source_link($post);
+	Utils::d($post->text);
+}
+
 test_berlin();
 

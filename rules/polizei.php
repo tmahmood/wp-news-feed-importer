@@ -57,7 +57,8 @@ class Polizei extends RDF
 	function get_content($xpath)
 	{
 		$text = array();
-		$textbody = $xpath->query('//p[@class="inhaltText"]')->item(0)->parentNode;
+		$textbody = $xpath->query('//h1')->item(0)->parentNode;
+		$this->remove_links($textbody);
 		$childNodes = $textbody->childNodes;
 		$innerhtml = array();
 		$indx = 0;
@@ -77,7 +78,9 @@ class Polizei extends RDF
 			}
 			$innerhtml[] = $textbody->ownerDocument->saveXML($child);
 		}
-		return implode("", $innerhtml);
+		$txt = implode("", $innerhtml);
+		preg_replace('/<-*.->/', '', $txt);
+		return $text;
 	}
 
 
@@ -85,6 +88,8 @@ class Polizei extends RDF
 	{
 		if ($child->nodeName == '#text' ||
 			$child->nodeName == '#script' ||
+			$child->nodeName == 'img'||
+			$child->nodeName == 'a'||
 			$child->nodeName == '#style') {
 			return true;
 		}
