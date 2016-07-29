@@ -2,7 +2,7 @@
 
 class Sachsen extends XML
 {
-	var $base_url = "https://www.polizei.sachsen.de/";
+	var $base_url = "https://www.polizei.sachsen.de/de/";
 	var $feed_url = "https://www.polizei.sachsen.de/de/presse_rss_all.xml";
 	var $category = null;
 	var $txt_selector = "id('content')/div[3]";
@@ -36,7 +36,7 @@ class Sachsen extends XML
 		$title = trim($post->title);
 		$city = explode('-', $title);
 		$post->category = trim($city[0]);
-		$post->title = trim($post->title);
+		$post->title = $title;
 	}
 
 	function get_missing_text($xpath, &$post)

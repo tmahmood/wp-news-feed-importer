@@ -34,6 +34,7 @@ class Brandenburg extends JSON
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
 		$post->text = Utils::clean_text($item->text);
+		print_r ($item);
 	}
 
 	function get_items()
@@ -42,5 +43,4 @@ class Brandenburg extends JSON
 		$items = json_decode($str);
 		return $items->data;
 	}
-
 }

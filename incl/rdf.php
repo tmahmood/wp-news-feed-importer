@@ -33,7 +33,6 @@ class RDF extends Basefeed
 
 	function parse(&$post, $item)
 	{
-		$post = new BlogPost();
 		$post->link  = (string) $item->value;
 		$post->date  = null;
 		$post->title = null;
