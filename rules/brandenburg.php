@@ -26,6 +26,10 @@ class Brandenburg extends JSON
 						"103" => "Cottbus (CBS)",
 						"500" => "Überregional",
 					);
+	var $category_slug = array(
+				'Potsdam (PDM)'=> 'potsdam-pdm',
+				'Oberhavel' => 	'oberhavel'
+			);
 	var $imgs_sel = '//div[@class="pbb-article-text"]/img';
 
 	function parse(&$post, $item)
@@ -34,7 +38,6 @@ class Brandenburg extends JSON
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
 		$post->text = Utils::clean_text($item->text);
-		print_r ($item);
 	}
 
 	function get_items()

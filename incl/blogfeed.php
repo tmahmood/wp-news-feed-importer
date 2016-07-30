@@ -25,6 +25,10 @@ class BlogFeed
 			}
 			$this->feed->parse($post, $item);
 			$this->parse_source_link($post);
+			if (isset($this->feed->category_slug)
+					&& array_key_exists($post->category, $this->feed->category_slug)) {
+				$post->category_slug = $this->feed->category_slug[$post->category];
+			}
 			$this->posts[] = $post;
         }
 	}

@@ -9,6 +9,6 @@ class BlogPost
     var $text;
 	var $picture;
 	var $parent_category;
-
+	var $category_slug;
 }
 

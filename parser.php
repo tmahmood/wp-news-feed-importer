@@ -64,11 +64,15 @@ $tmpl = '%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a
 foreach ($posts as $post){
 	$content = sprintf($tmpl, $post->text, $post->link);
 	if (post_exists($post->title, $content) !== 0) {
-		echo "POST EXISTS\n";
+		echo "x";
 		continue;
+	} else {
+		echo ".";
 	}
 	if (isset($post->parent_category)) {
 		$category_id = wp_create_category($post->category, $post->parent_category);
+	} else if(isset($post->category_slug)) {
+		$category_id = get_category_by_slug($post->category_slug)->term_id;
 	} else {
 		$category_id = wp_create_category($post->category);
 	}

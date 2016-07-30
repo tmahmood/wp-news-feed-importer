@@ -12,6 +12,11 @@ class Sachsen extends XML
 		'navigation_internet_blau/symbole/blau/vanstrich.gif',
 		'navigation_internet_blau/symbole/blau/vanstrich_hoch.gif',
 		);
+	var $category_slug = array(
+		'PD Chemnitz'=> 'pd-chemnitz',
+		'PD Leipzig' => 'pd-leipzig',
+		'PD Dresden' => 'pd-dresden',
+	);
 
 	function get_content($xpath)
 	{
