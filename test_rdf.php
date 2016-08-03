@@ -30,7 +30,7 @@ function test_rdf()
 
 function test_berlin()
 {
-	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.501514.php';
+	$link = 'http://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.504938.php';
 	$blogfeed = new BlogFeed('Berlin');
 	$feed = new Berlin;
 	$post = new BlogPost;
@@ -40,7 +40,8 @@ function test_berlin()
 	$post->category = "Berlin (Polizei)";
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
-	print_r ($post->picture);
+	print mb_detect_encoding($post->text) . "\n";
+	print ($post->text);
 }
 
 function test_zoll()
@@ -77,5 +78,5 @@ function test_polizei()
 	echo preg_replace('/<!-(.*)->/', '', $post->text);
 }
 
-test_polizei();
+test_berlin();
 

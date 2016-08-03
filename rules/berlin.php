@@ -18,8 +18,7 @@ class Berlin extends XML
 	function get_content($xpath)
 	{
 		$elements = $xpath->query($this->text_cnt);
-		$txt = $this->_get_inner_html($elements->item(0)->parentNode);
-		return $txt;
+		return $this->_get_inner_html($elements->item(0)->parentNode);
 	}
 
 	function ignore_content($node)
