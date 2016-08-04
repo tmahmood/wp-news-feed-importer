@@ -47,7 +47,10 @@ class RDF extends Basefeed
 	function get_page_obj($post)
 	{
 		$doc = new DOMDocument();
-		@$doc->loadHTMLFile($post->link);
+		$content = file_get_contents($post->link);
+		$content = str_replace('imp:live-info', 'div', $content);
+		$content = str_replace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>', $content);
+		@$doc->loadHTML($content);
 		// remove scripts
 		while (($r = $doc->getElementsByTagName("script")) && $r->length) {
 			$r->item(0)->parentNode->removeChild($r->item(0));

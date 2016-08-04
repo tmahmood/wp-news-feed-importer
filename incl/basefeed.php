@@ -118,6 +118,9 @@ class Basefeed
 
 	function remove_links($parentnode)
 	{
+		if ($parentnode == null) {
+			return;
+		}
 		$tobe_removed = array();
 		foreach ($parentnode->getElementsByTagName('a') as $link){
 			$tobe_removed[] = $link;
