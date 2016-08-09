@@ -48,8 +48,8 @@ class RDF extends Basefeed
 	{
 		$doc = new DOMDocument();
 		$content = file_get_contents($post->link);
-		$content = str_replace('imp:live-info', 'div', $content);
 		$content = str_replace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>', $content);
+		$content = str_replace('imp:live-info', 'div', $content);
 		@$doc->loadHTML($content);
 		// remove scripts
 		while (($r = $doc->getElementsByTagName("script")) && $r->length) {

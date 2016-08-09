@@ -57,7 +57,7 @@ class Polizei extends RDF
 	function get_content($xpath)
 	{
 		$text = array();
-		$textbody = $xpath->query('//h1')->item(0)->parentNode;
+		$elm = $xpath->query('//h1')->item(0)->parentNode;
 		$this->remove_links($textbody);
 		$childNodes = $textbody->childNodes;
 		$innerhtml = array();
