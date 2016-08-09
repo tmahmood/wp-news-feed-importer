@@ -5,7 +5,7 @@ class Zoll extends XML
 	var $base_url = 'http://www.zoll.de';
 	var $category = "Zoll Deutschland (Bundesweite Meldungen des Dienstes “Zoll im Fokus”)";
 	var $feed_url = "http://www.zoll.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSSZollImFokus.xml";
-	var $text_cnt = 'id("main")/p';
+	var $text_cnt = 'id("main")/h1';
 	var $imgs_sel = array('//span[@class="zoom"]/a', '//dl[@class="photo"]//a');
 	var $custom_image_src = true;
 	var $parent_category = 504;
@@ -13,9 +13,9 @@ class Zoll extends XML
 	function get_content($xpath)
 	{
 		$txt = array();
-		$textbody = $xpath->query($this->text_cnt)->item(0)->parentNode;
+		$h1 = $query->xpath($text_cnt)->item(0);
+		$textbody = $h1->parentNode;
 		$this->remove_links($textbody);
-		$h1 = $textbody->getElementsByTagName('h1')->item(0);
 		$h1->parentNode->removeChild($h1);
 		$txt = $this->_get_inner_html($textbody);
 		if (trim($txt) == '') {
