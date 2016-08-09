@@ -1,9 +1,40 @@
 <?php
 
+define('UTF8_TAG',
+		'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>');
+
 class Basefeed
 {
 	var $img_root;
 
+	/**
+	 * Downloads page, cleans up set
+	 * @Return DOMXPath object
+	 */
+	function get_page_obj($post)
+	{
+		$doc = new DOMDocument();
+		$content = Utils::download_content($post->link);
+		$content = str_replace('</head>', UTF8_TAG, $content);
+		if (property_exists($this, 'replace_elms_child')) {
+			$content = str_replace($this->replace_elms_child,
+								   $this->replace_with_child,
+								   $content);
+		}
+		@$doc->loadHTML($content);
+		// remove scripts
+		while (($r = $doc->getElementsByTagName("script")) &&
+				$r->length) {
+			$r->item(0)->parentNode->removeChild($r->item(0));
+		}
+		return new DOMXpath($doc);
+	}
+
+	/**
+	 * is_bad_url, check if the url is in list of bad URLS
+	 * @return true/false
+	 * @author Tarin Mahmood
+	 **/
 	function is_bad_url($imgurl)
 	{
 		return isset($this->bad_url) &&
@@ -18,9 +49,16 @@ class Basefeed
 
 	function call_custom_image_parsing()
 	{
-		return isset($this->custom_image_src) && $this->custom_image_src;
+		return isset($this->custom_image_src) &&
+				$this->custom_image_src;
 	}
 
+	/**
+	 * Downloads and save images in page in dis
+	 *
+	 * @return list of images found
+	 * @author Tarin Mahmood
+	 */
 	function get_image($xpath)
 	{
 		$images = array();
@@ -42,7 +80,8 @@ class Basefeed
 		}
 		$imgs = array();
 		$added = array();
-		list($storepath, $imgsrcpath) = Utils::get_base_url($this->base_url);
+		list($storepath, $imgsrcpath) = Utils::get_base_url(
+											$this->base_url);
 		if (!file_exists($storepath)) {
 			mkdir($storepath, 0777, true);
 		}
@@ -113,7 +152,8 @@ class Basefeed
 
 	protected function is_elm_with_class($node, $nodename)
 	{
-		return $node->nodeName == $nodename && $node->hasAttribute('class');
+		return $node->nodeName == $nodename &&
+				$node->hasAttribute('class');
 	}
 
 	function remove_links($parentnode)

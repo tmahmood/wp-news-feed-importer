@@ -35,6 +35,9 @@ class Polizei extends RDF
 	var $imgs_sel = '//div[@class="inhaltBilderZoom"]/a';
 	var $custom_image_src = true;
 
+	var $replace_elms_child = array('imp:live-info');
+	var $replace_with_child = array('div');
+
 	function get_missing_text($xpath, $post)
 	{
 		$currentnode = $xpath->query('//h1')->item(0)->nextSibling;
@@ -57,7 +60,7 @@ class Polizei extends RDF
 	function get_content($xpath)
 	{
 		$text = array();
-		$elm = $xpath->query('//h1')->item(0)->parentNode;
+		$textbody = $xpath->query('//h1')->item(0)->parentNode;
 		$this->remove_links($textbody);
 		$childNodes = $textbody->childNodes;
 		$innerhtml = array();

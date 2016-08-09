@@ -18,17 +18,5 @@ class XML extends BaseFeed
 		$post->category = $this->category;
 		return $post;
 	}
-
-	function get_page_obj($post)
-	{
-		$doc = new DOMDocument();
-		$content = Utils::download_content($post->link);
-		@$doc->loadHTML($content);
-		// remove scripts
-		while (($r = $doc->getElementsByTagName("script")) && $r->length) {
-			$r->item(0)->parentNode->removeChild($r->item(0));
-		}
-		return new DOMXpath($doc);
-	}
 }
 

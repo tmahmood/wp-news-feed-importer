@@ -1,7 +1,7 @@
 <?php
 define('DEBUG', file_exists('.git'));
 if (DEBUG) {
-	define('SCRIPT_ABSPATH', '/home/mahmood/Projects/leonardos_t/wordpress/feed_parser');
+	define('SCRIPT_ABSPATH', '/home/mahmood/Projects/leo_t/wordpress/feed_parser');
 } else {
 	define('SCRIPT_ABSPATH', __dir__);
 }
@@ -81,7 +81,7 @@ foreach ($posts as $post){
 				'post_content'  => $content,
 				'post_author'   => $user_id,
 				'post_type'     => 'post',
-				'post_status'   => 'draft',
+				'post_status'   => 'publish',
 				'tax_input'		=> array('polizei report'),
 				));
 	if($id) {
