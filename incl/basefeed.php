@@ -15,6 +15,9 @@ class Basefeed
 	{
 		$doc = new DOMDocument();
 		$content = Utils::download_content($post->link);
+		if(!$this->is_html_file($content, $post->link)) {
+			return false;
+		}
 		$content = str_replace('</head>', UTF8_TAG, $content);
 		if (property_exists($this, 'replace_elms_child')) {
 			$content = str_replace($this->replace_elms_child,
@@ -23,11 +26,24 @@ class Basefeed
 		}
 		@$doc->loadHTML($content);
 		// remove scripts
-		while (($r = $doc->getElementsByTagName("script")) &&
-				$r->length) {
+		while (($r = $doc->getElementsByTagName("script")) && $r->length) {
 			$r->item(0)->parentNode->removeChild($r->item(0));
 		}
 		return new DOMXpath($doc);
+	}
+
+	/**
+	 * is_html_file
+	 * @return true/false
+	 * @author Tarin Mahmood
+	 **/
+	public function is_html_file($content, $link)
+	{
+		$tmp_file_name = IMG_SRC_PATH . '/tmp/' . md5($link);
+		file_put_contents($tmp_file_name , $content);
+		$mtype = mime_content_type($tmp_file_name);
+		unlink($tmp_file_name);
+		return $mtype == 'text/html';
 	}
 
 	/**

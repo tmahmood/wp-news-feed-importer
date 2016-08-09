@@ -24,7 +24,9 @@ class BlogFeed
 				$post->parent_category = $this->feed->parent_category;
 			}
 			$this->feed->parse($post, $item);
-			$this->parse_source_link($post);
+			if($this->parse_source_link($post) === false){
+				continue;
+			}
 			if (isset($this->feed->category_slug)
 				&& array_key_exists($post->category, $this->feed->category_slug)) {
 				$post->category_slug = $this->feed->category_slug[$post->category];
@@ -42,6 +44,9 @@ class BlogFeed
 			return;
 		}
 		$xpath = $this->feed->get_page_obj($post);
+		if (!is_object($xpath) || $xpath == null) {
+			return false;
+		}
 		$post->picture = $this->feed->get_image($xpath);
 		$post->text  = (string) $this->feed->get_content($xpath);
 		$this->fill_missing_data($xpath, $post);
