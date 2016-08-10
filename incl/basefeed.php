@@ -160,10 +160,14 @@ class Basefeed
 			if($this->ignore_content($child)) {
 				continue;
 			}
+			if (trim($node->nodeValue) == '') {
+				continue;
+			}
 			$txt[] = $node->ownerDocument->saveXML($child);
 		}
-		$txt = implode("<br>", $txt);
-		return $txt;
+		$txt = implode("\n", $txt);
+		$txt = preg_replace("/[\r\n]+/", "\n", $txt);
+		return "<p>$txt</p>";
 	}
 
 	protected function is_elm_with_class($node, $nodename)
