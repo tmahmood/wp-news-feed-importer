@@ -26,6 +26,22 @@ class Berlin extends XML
 		return false;
 	}
 
+	/**
+	 * Clean up and add formatting as you like
+	 *
+	 * @return string
+	 * @author Tarin Mahmood
+	 */
+	function text_formatting($text)
+	{
+		/// NO CHANGES BEFORE THIS
+		// replacing extra line breaks
+		$text = str_replace("\n", ' ', $text);
+
+		/// NO CHANGES AFTER THIS
+		return $text;
+	}
+
 
 	function get_missing_text($xpath, &$post)
 	{

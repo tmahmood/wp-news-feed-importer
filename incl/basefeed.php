@@ -8,28 +8,53 @@ class Basefeed
 	var $img_root;
 
 	/**
-	 * Downloads page, cleans up set
-	 * @Return DOMXPath object
-	 */
-	function get_page_obj($post)
+	 * downloads content
+	 * @return string
+	 * @author Tarin Mahmood
+	 **/
+	protected function download_content($link)
 	{
-		$doc = new DOMDocument();
-		$content = Utils::download_content($post->link);
-		if(!$this->is_html_file($content, $post->link)) {
+		$content = Utils::download_content($link);
+		if(!$this->is_html_file($content, $link)) {
 			return false;
 		}
+		// force html utf8
 		$content = str_replace('</head>', UTF8_TAG, $content);
+		// check if needs to remove any nodes
 		if (property_exists($this, 'replace_elms_child')) {
 			$content = str_replace($this->replace_elms_child,
 								   $this->replace_with_child,
 								   $content);
 		}
+		return $content;
+	}
+
+	/**
+	 * get_xpath
+	 * @return xpath object
+	 * @author Tarin Mahmood
+	 **/
+	protected function get_xpath($content)
+	{
+		$doc = new DOMDocument();
 		@$doc->loadHTML($content);
 		// remove scripts
 		while (($r = $doc->getElementsByTagName("script")) && $r->length) {
 			$r->item(0)->parentNode->removeChild($r->item(0));
 		}
 		return new DOMXpath($doc);
+	}
+
+	/**
+	 * Downloads page, cleans up set
+	 * @Return DOMXPath object
+	 */
+	function get_page_obj($post)
+	{
+		// download page
+		$content = $this->download_content($post->link);
+		// return xpath
+		return $this->get_xpath($content);
 	}
 
 	/**
@@ -94,10 +119,14 @@ class Basefeed
 		if ($count_images == 0) {
 			return "";
 		}
+		return $this->download_store_images($images);
+	}
+
+	function download_store_images($images)
+	{
 		$imgs = array();
 		$added = array();
-		list($storepath, $imgsrcpath) = Utils::get_base_url(
-											$this->base_url);
+		list($storepath, $imgsrcpath) = Utils::get_base_url($this->base_url);
 		if (!file_exists($storepath)) {
 			mkdir($storepath, 0777, true);
 		}
@@ -165,7 +194,7 @@ class Basefeed
 			}
 			$txt[] = $node->ownerDocument->saveXML($child);
 		}
-		$txt = implode("\n", $txt);
+		$txt = implode(" ", $txt);
 		$txt = preg_replace("/[\r\n]+/", "\n", $txt);
 		return "<p>$txt</p>";
 	}
@@ -175,6 +204,15 @@ class Basefeed
 		return $node->nodeName == $nodename &&
 				$node->hasAttribute('class');
 	}
+
+	protected function is_elm_with_attr($elm, $attr)
+	{
+		if($elm->hasAttribute('id')) {
+			return $elm->getAttribute('id');
+		}
+		return false;
+	}
+
 
 	function remove_links($parentnode)
 	{

@@ -31,6 +31,9 @@ class BlogFeed
 				&& array_key_exists($post->category, $this->feed->category_slug)) {
 				$post->category_slug = $this->feed->category_slug[$post->category];
 			}
+			if (method_exists($this->feed, 'text_formatting')) {
+				$post->text = $this->feed->text_formatting($post->text);
+			}
 			$this->posts[] = $post;
         }
 	}

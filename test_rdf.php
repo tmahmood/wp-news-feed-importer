@@ -2,7 +2,7 @@
 define('DEBUG', file_exists('.git'));
 define('SCRIPT_ABSPATH', __dir__);
 define('IMG_STORE_PATH', __dir__ . '/imgs/');
-define('IMG_SRC_PATH', '/feed_parser/imgs/');
+define('IMG_SRC_PATH', __dir__.'/imgs');
 include_once "incl/bootstrap.php";
 
 // considering our app is inside WordPress directory
@@ -40,7 +40,6 @@ function test_berlin()
 	$post->category = "Berlin (Polizei)";
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
-	print mb_detect_encoding($post->text) . "\n";
 	print ($post->text);
 }
 
@@ -60,8 +59,6 @@ function test_zoll()
 	Utils::d($post->picture);
 }
 
-
-
 function test_polizei()
 {
 	$link = 'http://www.polizei.bayern.de/oberfranken/fahndung/personen/tote/index.html/245358';
@@ -78,5 +75,16 @@ function test_polizei()
 	echo preg_replace('/<!-(.*)->/', '', $post->text);
 }
 
-test_berlin();
+function test_brandenbur()
+{
+	$link = 'https://polizei.brandenburg.de/fahndung/einbruch-in-arztpraxis-wer-erkennt-den-m/351879';
+	$blogfeed = new BlogFeed('Brandenburg');
+	$feed = new Brandenburg;
+	$post = new BlogPost;
+	$item = json_decode('{"district": "500", "timestamp": 1470828300, "category": "8", "url": "/fahndung/polizei-bittet-bevoelkerung-um-mithilfe/351871", "title": "Polizei bittet Bevölkerung um Mithilfe", "text": "\nAktuell sucht die Kriminalpolizei in Potsdam nach noch drei unbekannten Männern. Diese sind verdächtigt, in der Silvesternacht vom 31.12.2013 auf den 01.101.2014 einen Briefkasten eines Verwaltungsgebäudes mittels Einsatz von Pyrotechnik erheblich beschädigt zu haben.\n\n \n\n \n\n \n\nDie Polizei fragt: Wer  kennt die Männer auf den abgebildeten Fotos und kann Hinweise zu deren Identität oder Aufenthaltsort machen? Ihre Hinweise richten Sie bitte unter der Telefonnummer: 0331 5508- 1224 an die Polizeiinspektion Potsdam oder jede andere Polizeidienstelle. Gerne können sie auch unser Hinweisformular im Internet nutzen. Dieses erreichen Sie unter: www.polizei.brandenburg.de\n\n \n\nTatzeit: 01.01.2014\n", "thumbnail": "/fm/24/thumbnails/PM%201874%20Potsdam%201.jpg.66864.jpg", "images": [ "/fm/24/thumbnails/PM%201874%20Potsdam%201.jpg.66863.jpg", "/fm/24/thumbnails/PM-%201874%20Potsdam.jpg.66871.jpg" ], "e_ort": "Potsdam, Nördliche Innenstadt, Friedrich-Ebert-Straße" }');
+	$feed->parse($post, $item);
+	print_r ($post);
+}
+
+test_brandenbur();
 

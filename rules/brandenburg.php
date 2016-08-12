@@ -30,7 +30,8 @@ class Brandenburg extends JSON
 				'Potsdam (PDM)'=> 'potsdam-pdm',
 				'Oberhavel' => 	'oberhavel'
 			);
-	var $imgs_sel = '//div[@class="pbb-article-text"]/img';
+	var $imgs_sel = array(  '//div[@class="pbb-article-text"]/img',
+							"id('pbb-slides')//img");
 
 	function parse(&$post, $item)
 	{
@@ -38,6 +39,10 @@ class Brandenburg extends JSON
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
 		$post->text = Utils::clean_text($item->text);
+		if ($item->images != null) {
+			$post->images = array_map(function($img) {
+				return $this->base_url . '/' . $img; }, $item->images);
+		}
 	}
 
 	function get_items()
