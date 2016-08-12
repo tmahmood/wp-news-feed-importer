@@ -31,6 +31,9 @@ class Polizei extends RDF
 			"schwaben_sw" => "Kempten (Polizeipräsidium Schwaben Süd/West)",
 			"unterfranken" => "Würzburg (Polizeipräsidiums Unterfranken)",
 			);
+	var $category_slug = array(
+		'muenchen' => 'muenchen-polizei'
+	);
 	var $text_cnt = '';
 	var $imgs_sel = '//div[@class="inhaltBilderZoom"]/a';
 	var $custom_image_src = true;
