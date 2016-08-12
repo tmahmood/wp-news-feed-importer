@@ -27,9 +27,9 @@ class Brandenburg extends JSON
 						"500" => "Überregional",
 					);
 	var $category_slug = array(
-				'Potsdam (PDM)'=> 'potsdam-pdm',
-				'Oberhavel' => 	'oberhavel'
-			);
+				'85'=> 'potsdam-pdm',
+				 '3'=> 'oberhavel');
+	var $sel = '//div[@class="pbb-article-text"]';
 	var $imgs_sel = array(  '//div[@class="pbb-article-text"]/img',
 							"id('pbb-slides')//img");
 
@@ -38,11 +38,16 @@ class Brandenburg extends JSON
 		$post->category = $this->category[$item->district];
 		$post->title = $item->title;
 		$post->link = $this->base_url . $item->url;
-		$post->text = Utils::clean_text($item->text);
 		if ($item->images != null) {
-			$post->images = array_map(function($img) {
+			$post->picture = array_map(function($img) {
 				return $this->base_url . '/' . $img; }, $item->images);
 		}
+	}
+
+	function get_content($xpath)
+	{
+		$textbody = $xpath->query($this->sel)->item(0);
+		return $this->_get_inner_html($textbody);
 	}
 
 	function get_items()
@@ -51,4 +56,10 @@ class Brandenburg extends JSON
 		$items = json_decode($str);
 		return $items->data;
 	}
+
+	function ignore_content($node)
+	{
+		return false;
+	}
+
 }

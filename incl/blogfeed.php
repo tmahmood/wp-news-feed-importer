@@ -25,6 +25,7 @@ class BlogFeed
 			}
 			$this->feed->parse($post, $item);
 			if($this->parse_source_link($post) === false){
+				print("no\n");
 				continue;
 			}
 			if (isset($this->feed->category_slug)
@@ -43,14 +44,13 @@ class BlogFeed
 	 */
 	function parse_source_link(&$post)
 	{
-		if (isset($this->feed->json_data)) {
-			return;
-		}
 		$xpath = $this->feed->get_page_obj($post);
 		if (!is_object($xpath) || $xpath == null) {
 			return false;
 		}
-		$post->picture = $this->feed->get_image($xpath);
+		if ($post->picture != null) {
+			$post->picture = $this->feed->get_image($xpath);
+		}
 		$post->text  = (string) $this->feed->get_content($xpath);
 		$this->fill_missing_data($xpath, $post);
 	}
