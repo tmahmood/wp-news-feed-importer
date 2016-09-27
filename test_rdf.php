@@ -14,7 +14,7 @@ date_default_timezone_set('Europe/Berlin');
 
 function test_rdf()
 {
-	$link = 'http://www.polizei.bayern.de/fahndung/personen/straftaeter/unbekannt/index.html/243670';
+	$link = 'http://www.polizei.bayern.de/muenchen/news/presse/aktuell/index.html/246302';
 	$blogfeed = new BlogFeed('Polizei');
 	$feed = new Polizei;
 	$post = new BlogPost;
@@ -24,8 +24,7 @@ function test_rdf()
 	$post->category = null;
 	$xpath = $feed->get_page_obj($post);
 	$blogfeed->parse_source_link($post);
-	$blogfeed->fill_missing_data($xpath, $post);
-	echo $post->content;
+	print_r($post);
 }
 
 function test_berlin()
@@ -86,5 +85,5 @@ function test_brandenbur()
 	print_r ($post);
 }
 
-test_brandenbur();
+test_rdf();
 

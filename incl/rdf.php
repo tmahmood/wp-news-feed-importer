@@ -38,12 +38,12 @@ class RDF extends Basefeed
 		$post->link  = (string) $item->value;
 		$post->date  = null;
 		$post->title = null;
-		if (isset($this->category) &&
-			!is_array($this->category)) {
+		if (isset($this->category) && !is_array($this->category)) {
 			$post->category = $this->category;
 		} else {
 			$post->category = null;
 		}
+		$this->set_category_details($post);
 		return $post;
 	}
 }

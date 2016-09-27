@@ -16,6 +16,7 @@ class XML extends BaseFeed
 		$post->link  = (string) $item->link;
 		$post->title = (string) $item->title;
 		$post->category = $this->category;
+		$this->set_category_details($post);
 		return $post;
 	}
 }

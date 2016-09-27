@@ -62,6 +62,7 @@ require_once WORDPRESS_PATH .'/wp-admin/includes/media.php';
 $user_id = 9;
 $tmpl = '%s<br><br><a href="%s" alt="Zum Originalartikel">Zum Originalartikel</a>';
 foreach ($posts as $post){
+	print_r ($post);
 	$content = sprintf($tmpl, $post->text, $post->link);
 	if (post_exists($post->title, $content) !== 0) {
 		echo "x";
@@ -69,10 +70,10 @@ foreach ($posts as $post){
 	} else {
 		echo ".";
 	}
-	if (isset($post->parent_category)) {
-		$category_id = wp_create_category($post->category, $post->parent_category);
-	} else if(isset($post->category_slug)) {
+	if(isset($post->category_slug)) {
 		$category_id = get_category_by_slug($post->category_slug)->term_id;
+	} elseif (isset($post->parent_category)) {
+		$category_id = wp_create_category($post->category, $post->parent_category);
 	} else {
 		$category_id = wp_create_category($post->category);
 	}

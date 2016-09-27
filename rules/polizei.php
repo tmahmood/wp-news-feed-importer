@@ -133,6 +133,9 @@ class Polizei extends RDF
 		foreach ($segs as $seg){
 			if (in_array($seg, $keys)) {
 				$post->category = $this->category[$seg];
+				if (array_key_exists($seg, $this->category_slug)) {
+					$post->category_slug = $this->category_slug[$seg];
+				}
 				break;
 			}
 		}

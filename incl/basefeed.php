@@ -227,5 +227,37 @@ class Basefeed
 			$link->parentNode->removeChild($link);
 		}
 	}
+
+	/**
+	 * set_category_details
+	 * @return void
+	 * @author Tarin Mahmood
+	 **/
+	public function set_category_details(&$post)
+	{
+		if (isset($this->parent_category)) {
+			$post->parent_category = $this->parent_category;
+		}
+		if ($post->category_slug == null && $this->category_slug_set($post)) {
+			$post->category_slug = $this->category_slug[$post->category];
+		}
+	}
+
+	function category_slug_set($post)
+	{
+		return isset($this->category_slug)
+				&& array_key_exists($post->category, $this->category_slug);
+	}
+
+	/**
+	 * text_formatting, place holder fuction
+	 * @return void
+	 * @author Tarin Mahmood
+	 **/
+	public function text_formatting($text)
+	{
+		return $text;
+	}
+
 }
 

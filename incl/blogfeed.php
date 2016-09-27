@@ -20,21 +20,11 @@ class BlogFeed
 		}
         foreach ($items as $item) {
 			$post = new BlogPost;
-			if (isset($this->feed->parent_category)) {
-				$post->parent_category = $this->feed->parent_category;
-			}
 			$this->feed->parse($post, $item);
 			if($this->parse_source_link($post) === false){
-				print("no\n");
 				continue;
 			}
-			if (isset($this->feed->category_slug)
-				&& array_key_exists($post->category, $this->feed->category_slug)) {
-				$post->category_slug = $this->feed->category_slug[$post->category];
-			}
-			if (method_exists($this->feed, 'text_formatting')) {
-				$post->text = $this->feed->text_formatting($post->text);
-			}
+			$post->text = $this->feed->text_formatting($post->text);
 			$this->posts[] = $post;
         }
 	}
@@ -53,6 +43,7 @@ class BlogFeed
 		}
 		$post->text  = (string) $this->feed->get_content($xpath);
 		$this->fill_missing_data($xpath, $post);
+		$this->feed->set_category_details($post);
 	}
 
 	/**
